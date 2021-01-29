@@ -1,0 +1,12 @@
+
+<div class="card">
+    <div class="card-body">
+        <h1>{{actionTitle}} CRUD Example</h1>
+        <div class="form-group">
+            <label for="modelText">Text</label>
+            <input id="modelText" name="modelText" type="text" class="form-control" [(ngModel)]="model.text" placeholder="text goes here..." />
+        </div>
+        <button class="btn btn-light mr-3" (click)="back()">Cancel</button>
+        <button class="btn btn-primary" (click)="save()">Save</button>
+    </div>
+</div>
