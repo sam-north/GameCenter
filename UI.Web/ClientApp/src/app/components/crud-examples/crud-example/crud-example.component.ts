@@ -21,6 +21,8 @@ export class CrudExampleComponent implements OnInit {
     this.actionTitle = id && id !== 0 ? "Update" : "Create";
     if (id && id !== 0) 
       this.load(id);
+    else
+      this.model = new CRUDExample();
   }
 
   async load(id: number) {
@@ -32,12 +34,7 @@ export class CrudExampleComponent implements OnInit {
   }
 
   async save(){
-    if (this.model.id === 0) {
-      const result = await this.api.createCrudExample(this.model);
-    }
-    else{
-      const result = await this.api.updateCrudExample(this.model);
-    }
+    const result = await (this.model.id === 0) ? this.api.createCrudExample(this.model) : this.api.updateCrudExample(this.model);
     this.router.navigate(['/crud-examples']);
   }
 }

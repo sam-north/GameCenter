@@ -29,7 +29,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult<int> Create(CRUDExample model)
+        public ActionResult<int> Post(CRUDExample model)
         {
             var entity = CrudExampleLogic.Save(model);
             return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
