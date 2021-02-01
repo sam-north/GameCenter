@@ -8,7 +8,7 @@ import { CRUDExample } from '../models/CRUDExample';
 export class ApiService {
   url:string = window.location.href;
   arr:string[] = this.url.split("/");
-  rootUrl:string = "https://localhost:44353"
+  rootUrl:string = "https://localhost:5001"
 
   constructor(private http: HttpClient) { }
 

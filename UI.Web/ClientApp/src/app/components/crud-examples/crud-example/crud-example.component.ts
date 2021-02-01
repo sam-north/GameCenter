@@ -21,8 +21,6 @@ export class CrudExampleComponent implements OnInit {
     this.actionTitle = id && id !== 0 ? "Update" : "Create";
     if (id && id !== 0) 
       this.load(id);
-    else
-      this.model = new CRUDExample();
   }
 
   async load(id: number) {
