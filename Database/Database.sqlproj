@@ -71,6 +71,7 @@
     <Build Include="dbo\Tables\GameInstanceUser.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishProfiles\*.xml" />
+    <None Include="PublishProfiles\Database.publish.xml" />
+    <None Include="PublishProfiles\Database.local.publish.xml" />
   </ItemGroup>
 </Project>
