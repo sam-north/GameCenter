@@ -1,0 +1,17 @@
+<h1>Current Player: {{ player}} </h1>
+
+<!-- angular binds to events using parens-->  
+<button (click)="newGame()">Start new game</button>
+
+<!-- conditional template with a structural directive (*)-->  
+<h2 *ngIf="winner">Player {{ winner }} won the game!</h2>
+
+<main>
+    <!-- creates a template variable 'val' which we 
+    can use in this template-->
+    <square-component
+        *ngFor="let val of squares; let i = index"
+        [value]="val"
+        (click)="makeMove(i)">
+    </square-component>
+</main>

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -11,6 +10,8 @@ import { CounterComponent } from './components/counter/counter.component';
 import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
 import { CrudExampleComponent } from './components/crud-examples/crud-example/crud-example.component';
 import { CrudExamplesComponent } from './components/crud-examples/crud-examples.component';
+import { BoardComponent } from './components/tic-tac-toe/board/board.component';
+import { SquareComponent } from './components/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
 
 @NgModule({
@@ -21,7 +22,9 @@ import { ApiService } from './services/api.service';
     CounterComponent,
     FetchDataComponent,
     CrudExampleComponent,
-    CrudExamplesComponent
+    CrudExamplesComponent,
+    SquareComponent,
+    BoardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -33,6 +36,7 @@ import { ApiService } from './services/api.service';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },
+      { path: 'tic-tac-toe', component: BoardComponent }
     ])
   ],
   providers: [ApiService],
