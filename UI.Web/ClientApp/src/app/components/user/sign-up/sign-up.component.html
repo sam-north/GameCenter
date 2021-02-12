@@ -1,0 +1,14 @@
+<div>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" [(ngModel)]="signUpModel.email">
+</div>
+<div>
+    <label for="pass">Password (8 characters minimum):</label>
+    <input type="password" id="pass" name="password" [(ngModel)]="signUpModel.password" minlength="8" required>
+</div>
+<div>
+    <label for="confirm-password">Confirm Password:</label>
+    <input type="password" id="confirm-password" name="confirm-password" [(ngModel)]="signUpModel.confirmPassword" minlength="8" required>
+</div>
+
+<input type="submit" (click)="submitUser()" value="Sign in">

@@ -13,6 +13,7 @@ import { CrudExamplesComponent } from './components/crud-examples/crud-examples.
 import { BoardComponent } from './components/tic-tac-toe/board/board.component';
 import { SquareComponent } from './components/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
+import { SignUpComponent } from './components/user/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ApiService } from './services/api.service';
     CrudExampleComponent,
     CrudExamplesComponent,
     SquareComponent,
-    BoardComponent
+    BoardComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -34,6 +36,7 @@ import { ApiService } from './services/api.service';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'sign-up', component: SignUpComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },
       { path: 'tic-tac-toe', component: BoardComponent }
