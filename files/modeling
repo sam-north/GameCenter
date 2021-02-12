@@ -1,0 +1,4 @@
+-database
+-models
+-entitycontext (dataaccess)
+-use it in the logic (save/read/create, etc)
