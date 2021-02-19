@@ -9,7 +9,7 @@ namespace Core.Logic.Concretes
 {
     public class CrudExampleLogic : ICrudExampleLogic
     {
-        public ModelContext ModelContext { get; }
+        private ModelContext ModelContext { get; }
         public CrudExampleLogic(ModelContext modelContext)
         {
             //this is using a process called Constructor Injection which is a style of Dependency Injection.

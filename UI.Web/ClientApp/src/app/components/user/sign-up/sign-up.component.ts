@@ -14,7 +14,6 @@ export class SignUpComponent implements OnInit {
     password: null,
     confirmPassword: null
   };
-
   constructor(private api: ApiService) { }
 
   ngOnInit(): void {

@@ -9,29 +9,29 @@ namespace UI.Web.Controllers
     [Route("[controller]")]
     public class CrudExampleController : ControllerBase
     {
-        public ICrudExampleLogic CrudExampleLogic { get; }
+        public ICrudExampleLogic logic { get; }
         public CrudExampleController(ICrudExampleLogic crudExampleLogic)
         {
-            CrudExampleLogic = crudExampleLogic;
+            logic = crudExampleLogic;
         }
 
         [HttpGet]
         public ActionResult<List<CRUDExample>> Get()
         {
-            return CrudExampleLogic.Get();
+            return logic.Get();
         }
 
         [HttpGet]
         [Route("{id}")]
         public ActionResult<CRUDExample> Get(int id)
         {
-            return Ok(CrudExampleLogic.Get(id));
+            return Ok(logic.Get(id));
         }
 
         [HttpPost]
         public ActionResult<int> Post(CRUDExample model)
         {
-            var entity = CrudExampleLogic.Save(model);
+            var entity = logic.Save(model);
             return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
         }
 
@@ -40,14 +40,14 @@ namespace UI.Web.Controllers
         public ActionResult<CRUDExample> Put(int id, CRUDExample model)
         {
             model.Id = id;
-            return Ok(CrudExampleLogic.Save(model));
+            return Ok(logic.Save(model));
         }
 
         [HttpDelete]
         [Route("{id}")]
         public ActionResult Delete(int id)
         {
-            CrudExampleLogic.Delete(id);
+            logic.Delete(id);
             return Ok();
         }
     }

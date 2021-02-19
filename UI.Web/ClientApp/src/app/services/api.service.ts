@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CRUDExample } from '../models/CRUDExample';
+import { SignIn } from '../models/SignIn';
 import { SignUp } from '../models/SignUp';
 
 @Injectable({
@@ -31,10 +32,17 @@ export class ApiService {
   }
   deleteCrudExample(id: number): Promise<void> {
     return this.http.delete<void>(`${this.rootUrl}/crudexample/${id}`).toPromise();
-  }
-  
+  }  
   signUpUser(signUpModel: SignUp): Promise<SignUp> {
-    return this.http.post<SignUp>(`${this.rootUrl}/User`, 
+    return this.http.post<SignUp>(`${this.rootUrl}/User/SignUp`, 
+    { 
+      email: signUpModel.email,
+      password: signUpModel.password
+    }
+    ).toPromise();
+  }
+  signInUser(signUpModel: SignIn): Promise<SignIn> {
+    return this.http.post<SignIn>(`${this.rootUrl}/User/SignIn`, 
     { 
       email: signUpModel.email,
       password: signUpModel.password

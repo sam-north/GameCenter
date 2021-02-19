@@ -14,6 +14,7 @@ import { BoardComponent } from './components/tic-tac-toe/board/board.component';
 import { SquareComponent } from './components/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
 import { SignUpComponent } from './components/user/sign-up/sign-up.component';
+import { SignInComponent } from './components/user/sign-in/sign-in.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { SignUpComponent } from './components/user/sign-up/sign-up.component';
     CrudExamplesComponent,
     SquareComponent,
     BoardComponent,
-    SignUpComponent
+    SignUpComponent,
+    SignInComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -36,6 +38,7 @@ import { SignUpComponent } from './components/user/sign-up/sign-up.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
+      { path: 'sign-in', component: SignInComponent },
       { path: 'sign-up', component: SignUpComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },

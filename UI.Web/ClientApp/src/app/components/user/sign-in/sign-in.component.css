@@ -1,0 +1,9 @@
+input, button {
+    margin-top: 5px;
+    width: 182px;
+}
+
+#container{
+    margin: 0 auto;
+    width: 200px;
+}
