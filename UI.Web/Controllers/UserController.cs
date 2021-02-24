@@ -1,5 +1,8 @@
-﻿using Core.Logic.Interfaces;
-using Core.Models;
+﻿using Core.Framework.Models;
+using Core.Logic.Interfaces;
+using Core.Mappers.Interfaces;
+using Core.Models.Dtos;
+using Core.Validators.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -7,39 +10,55 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using UI.Web.Models;
 
 namespace UI.Web.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        public IUserLogic UserLogic { get; }
-        public UserController(IUserLogic userLogic)
+        IUserLogic UserLogic { get; }
+        IUserMapper UserMapper { get; }
+        IUserValidator UserValidator { get; }
+
+        public UserController(IUserLogic userLogic, IUserMapper userMapper, IUserValidator userValidator)
         {
             UserLogic = userLogic;
+            UserMapper = userMapper;
+            UserValidator = userValidator;
         }
 
         [HttpPost]
-        [Route("[action]")]
-        public ActionResult<int> SignUp(User model)
+        public ActionResult<Response<object>> SignUp(UserSignUpDto dto)
         {
-            var entity = UserLogic.Create(model);
-            return CreatedAtAction("meh", new { id = entity.Id }, entity);
+            var validationResponse = UserValidator.Validate(dto);
+            if (!validationResponse.IsValid)
+                return BadRequest(validationResponse);
+
+            var entity = UserMapper.Map(dto);
+            UserLogic.Create(entity);
+
+            return Ok();
         }
 
         [HttpPost]
-        [Route("[action]")]
-        public async Task<ActionResult<int>> SignInAsync(User model)
+        public async Task<ActionResult<Response<object>>> SignInAsync(UserSignInDto dto)
         {
-            var entity = UserLogic.SignIn(model);
+            var validationResponse = UserValidator.Validate(dto);
+            if (!validationResponse.IsValid)
+                return BadRequest(validationResponse);
 
-            if (entity != null)
+            var attemptCredentialsResponse = UserLogic.SignIn(UserMapper.Map(dto));
+            if (!attemptCredentialsResponse.IsValid)
+                return BadRequest(attemptCredentialsResponse);
+
+            if (attemptCredentialsResponse != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Email, entity.Email),
-                    new Claim("Id", entity.Id.ToString()),
+                    new Claim(nameof(RequestContext.Email), attemptCredentialsResponse.Data.Email),
+                    new Claim(nameof(RequestContext.UserId), attemptCredentialsResponse.Data.Id.ToString()),
                 };
 
                 var claimsIdentity = new ClaimsIdentity(
@@ -47,26 +66,11 @@ namespace UI.Web.Controllers
 
                 var authProperties = new AuthenticationProperties
                 {
-                    //AllowRefresh = <bool>,
-                    // Refreshing the authentication session should be allowed.
-
-                    //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                    // The time at which the authentication ticket expires. A 
-                    // value set here overrides the ExpireTimeSpan option of 
-                    // CookieAuthenticationOptions set with AddCookie.
-
-                    //IsPersistent = true,
-                    // Whether the authentication session is persisted across 
-                    // multiple requests. When used with cookies, controls
-                    // whether the cookie's lifetime is absolute (matching the
-                    // lifetime of the authentication ticket) or session-based.
-
-                    //IssuedUtc = <DateTimeOffset>,
-                    // The time at which the authentication ticket was issued.
-
-                    //RedirectUri = <string>
-                    // The full path or absolute URI to be used as an http 
-                    // redirect response value.
+                    AllowRefresh = true,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                    IsPersistent = true,
+                    IssuedUtc = DateTimeOffset.Now,
+                    RedirectUri = "User/SignIn"
                 };
 
                 await HttpContext.SignInAsync(
@@ -75,14 +79,15 @@ namespace UI.Web.Controllers
                     authProperties);
             }
 
-
-            return entity.Id;
-            //return CreatedAtAction("meh", new { id = entity.Id }, entity);
+            return Ok();
         }
 
-        //Controller/Action
-        //User/SignIn
+        [HttpPost]
+        public async Task<ActionResult<Response<object>>> SignOutAsync()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-        //Class/Method
+            return Ok();
+        }
     }
 }

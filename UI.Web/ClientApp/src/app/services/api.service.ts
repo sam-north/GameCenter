@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CRUDExample } from '../models/CRUDExample';
 import { SignIn } from '../models/SignIn';
 import { SignUp } from '../models/SignUp';
+import { catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -33,20 +35,39 @@ export class ApiService {
   deleteCrudExample(id: number): Promise<void> {
     return this.http.delete<void>(`${this.rootUrl}/crudexample/${id}`).toPromise();
   }  
-  signUpUser(signUpModel: SignUp): Promise<SignUp> {
-    return this.http.post<SignUp>(`${this.rootUrl}/User/SignUp`, 
+  signUpUser(signUpModel: SignUp): Promise<void> {
+    return this.http.post<void>(`${this.rootUrl}/User/SignUp`, 
+    { 
+      email: signUpModel.email,
+      password: signUpModel.password,
+      confirmPassword: signUpModel.confirmPassword
+    }
+    ).toPromise();
+  }
+  signInUser(signUpModel: SignIn): Promise<void> {
+    return this.http.post<void>(`${this.rootUrl}/User/SignIn`, 
     { 
       email: signUpModel.email,
       password: signUpModel.password
     }
     ).toPromise();
   }
-  signInUser(signUpModel: SignIn): Promise<SignIn> {
-    return this.http.post<SignIn>(`${this.rootUrl}/User/SignIn`, 
-    { 
-      email: signUpModel.email,
-      password: signUpModel.password
+  signOutUser(): Promise<void> {
+    return this.http.post<void>(`${this.rootUrl}/User/SignOut`, null).toPromise();
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
     }
-    ).toPromise();
+    // Return an observable with a user-facing error message.
+    return throwError('Something bad happened; please try again later.');
   }
 }

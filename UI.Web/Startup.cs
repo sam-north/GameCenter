@@ -1,4 +1,5 @@
 using Core.DataAccess;
+using Core.Framework.Models;
 using Core.Logic.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UI.Web.Models;
 
 namespace GameCenter
 {
@@ -30,6 +32,7 @@ namespace GameCenter
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie();
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -64,6 +67,8 @@ namespace GameCenter
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
@@ -115,6 +120,8 @@ namespace GameCenter
                 if (matchingInterface != null)
                     services.AddTransient(matchingInterface, targetClass);
             }
+
+            services.AddTransient<IRequestContext, RequestContext>();
         }
     }
 }

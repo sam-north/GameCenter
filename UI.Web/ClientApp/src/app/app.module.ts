@@ -15,6 +15,8 @@ import { SquareComponent } from './components/tic-tac-toe/square/square.componen
 import { ApiService } from './services/api.service';
 import { SignUpComponent } from './components/user/sign-up/sign-up.component';
 import { SignInComponent } from './components/user/sign-in/sign-in.component';
+import { ErrorInterceptorProvider } from './utilities/ErrorInterceptor';
+import { ClientService } from './services/client.service';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,11 @@ import { SignInComponent } from './components/user/sign-in/sign-in.component';
       { path: 'tic-tac-toe', component: BoardComponent }
     ])
   ],
-  providers: [ApiService],
+  providers: [
+    ApiService, 
+    ErrorInterceptorProvider,
+    ClientService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

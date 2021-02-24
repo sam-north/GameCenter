@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { SignUp } from 'src/app/models/SignUp';
 import { ApiService } from 'src/app/services/api.service';
 
@@ -14,7 +15,7 @@ export class SignUpComponent implements OnInit {
     password: null,
     confirmPassword: null
   };
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -26,10 +27,8 @@ export class SignUpComponent implements OnInit {
 
     if (this.signUpModel.email.length && this.signUpModel.password.length && this.signUpModel.confirmPassword.length
       && this.signUpModel.confirmPassword == this.signUpModel.password) {
-      //call to server to save
-      
-    const result = await this.api.signUpUser(this.signUpModel);
-    //this.router.navigate(['/crud-examples']);
+      const result = await this.api.signUpUser(this.signUpModel);
+      this.router.navigate(['/sign-in']);
     }
 
   }

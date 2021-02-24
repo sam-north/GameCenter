@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess;
+using Core.Framework.Models;
 using Core.Logic.Interfaces;
 using Core.Models;
 using CryptSharp;
@@ -17,8 +18,7 @@ namespace Core.Logic.Concretes
 
         public User Create(User model)
         {
-            model.Salt = Crypter.Blowfish.GenerateSalt();
-            model.Password = HashPassword(model.Password, model.Salt);
+            model.Password = HashPassword(model.Password, Crypter.Blowfish.GenerateSalt(6));
 
             ModelContext.Users.Add(model);
             ModelContext.SaveChanges();
@@ -26,20 +26,35 @@ namespace Core.Logic.Concretes
             return model;
         }
 
+        public Response<User> SignIn(User model)
+        {
+            var response = new Response<User>();
+            var dbUser = ModelContext.Users.SingleOrDefault(x => x.Email == model.Email);
+            if (dbUser == null)
+            {
+                response.Errors.Add("Invalid email or password");
+                return response;
+            }
+
+            bool matches = VerifyHash(dbUser.Password, model.Password);
+            if (!matches)
+            {
+                response.Errors.Add("Invalid email or password");
+                return response;
+            }
+
+            response.Data = dbUser;
+            return response;
+        }
+
         private string HashPassword(string password, string salt)
         {
             return Crypter.Blowfish.Crypt(Encoding.ASCII.GetBytes(password), salt);
         }
 
-        public User SignIn(User model)
+        private bool VerifyHash(string existingHash, string attemptedPassword)
         {
-            var dbUser = ModelContext.Users.SingleOrDefault(x => x.Email == model.Email);
-            if (dbUser == null) return null;
-
-            var passwordAttempt = HashPassword(model.Password, dbUser.Salt);
-            if (dbUser.Password != passwordAttempt) return null;
-
-            return dbUser;
+            return Crypter.SafeEquals(existingHash, HashPassword(attemptedPassword, existingHash));
         }
     }
 }
