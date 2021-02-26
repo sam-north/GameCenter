@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
+import { ClientService } from 'src/app/services/client.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -8,8 +9,8 @@ import { ApiService } from 'src/app/services/api.service';
 })
 export class NavMenuComponent {
   isExpanded = false;
-
-  constructor(private api: ApiService){
+  get isSignedin (): boolean { return this.clientService.isSignedIn; };
+  constructor(private api: ApiService, private clientService: ClientService){
     
   }
 

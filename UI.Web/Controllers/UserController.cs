@@ -77,15 +77,22 @@ namespace UI.Web.Controllers
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
+
+                HttpContext.Response.Cookies.Append("account", attemptCredentialsResponse.Data.Id.ToString(), new Microsoft.AspNetCore.Http.CookieOptions
+                {
+                    HttpOnly = false
+                });
             }
 
-            return Ok();
+            return Ok(attemptCredentialsResponse.Data);
         }
 
         [HttpPost]
         public async Task<ActionResult<Response<object>>> SignOutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            HttpContext.Response.Cookies.Delete("account");
 
             return Ok();
         }

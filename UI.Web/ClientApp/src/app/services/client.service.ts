@@ -5,5 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class ClientService {
  
+  get isSignedIn(): boolean { return document.cookie.indexOf('account') !== -1; };
   constructor() { }
 }

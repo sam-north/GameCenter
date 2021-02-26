@@ -5,6 +5,7 @@ import { SignIn } from '../models/SignIn';
 import { SignUp } from '../models/SignUp';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { Client } from '../models/Client';
 
 @Injectable({
   providedIn: 'root'
@@ -44,11 +45,11 @@ export class ApiService {
     }
     ).toPromise();
   }
-  signInUser(signUpModel: SignIn): Promise<void> {
+  signInUser(signInModel: SignIn): Promise<void> {
     return this.http.post<void>(`${this.rootUrl}/User/SignIn`, 
     { 
-      email: signUpModel.email,
-      password: signUpModel.password
+      email: signInModel.email,
+      password: signInModel.password
     }
     ).toPromise();
   }

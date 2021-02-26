@@ -47,14 +47,15 @@
               >Tic-Tac-Toe</a
             >
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-              <a class="nav-link text-dark" [routerLink]="['/sign-in']">Sign In</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-              <a class="nav-link text-dark" [routerLink]="['/sign-up']">Sign Up</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" (click)="signOut()" [routerLink]="['/sign-in']">Sign Out</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Account
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" *ngIf="!isSignedin" [routerLink]="['/sign-in']">Sign In</a>
+              <a class="dropdown-item" *ngIf="isSignedin"(click)="signOut()" [routerLink]="['/sign-in']">Sign Out</a>
+              <div class="dropdown-divider"></div>
+            </div>
           </li>
         </ul>
       </div>
