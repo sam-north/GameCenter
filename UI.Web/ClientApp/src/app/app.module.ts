@@ -13,11 +13,11 @@ import { CrudExamplesComponent } from './components/examples/crud-examples/crud-
 import { BoardComponent } from './components/games/tic-tac-toe/board/board.component';
 import { SquareComponent } from './components/games/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
-import { SignUpComponent } from './components/user/sign-up/sign-up.component';
-import { SignInComponent } from './components/user/sign-in/sign-in.component';
+import { SignUpComponent } from './components/account/sign-up/sign-up.component';
+import { SignInComponent } from './components/account/sign-in/sign-in.component';
 import { ErrorInterceptorProvider } from './utilities/ErrorInterceptor';
 import { ClientService } from './services/client.service';
-import { DashboardComponent } from './components/user/dashboard/dashboard.component';
+import { DashboardComponent } from './components/account/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
