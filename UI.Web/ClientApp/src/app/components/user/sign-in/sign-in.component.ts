@@ -27,6 +27,6 @@ export class SignInComponent implements OnInit {
       return;
     }
     const result = await this.api.signInUser(this.model);
-    this.router.navigate(['']);
+    this.router.navigate(['dashboard']);
   }
 }

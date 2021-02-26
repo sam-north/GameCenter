@@ -1,9 +1,11 @@
 input, button {
     margin-top: 5px;
-    width: 182px;
+    width: 100%;
 }
 
 #container{
     margin: 0 auto;
-    width: 200px;
+    width: 300px;    
+    padding: 20px;
+    background-color: #efefef;
 }

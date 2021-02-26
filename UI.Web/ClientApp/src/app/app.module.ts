@@ -6,17 +6,18 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
-import { CounterComponent } from './components/counter/counter.component';
-import { FetchDataComponent } from './components/fetch-data/fetch-data.component';
-import { CrudExampleComponent } from './components/crud-examples/crud-example/crud-example.component';
-import { CrudExamplesComponent } from './components/crud-examples/crud-examples.component';
-import { BoardComponent } from './components/tic-tac-toe/board/board.component';
-import { SquareComponent } from './components/tic-tac-toe/square/square.component';
+import { CounterComponent } from './components/examples/counter/counter.component';
+import { FetchDataComponent } from './components/examples/fetch-data/fetch-data.component';
+import { CrudExampleComponent } from './components/examples/crud-examples/crud-example/crud-example.component';
+import { CrudExamplesComponent } from './components/examples/crud-examples/crud-examples.component';
+import { BoardComponent } from './components/games/tic-tac-toe/board/board.component';
+import { SquareComponent } from './components/games/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
 import { SignUpComponent } from './components/user/sign-up/sign-up.component';
 import { SignInComponent } from './components/user/sign-in/sign-in.component';
 import { ErrorInterceptorProvider } from './utilities/ErrorInterceptor';
 import { ClientService } from './services/client.service';
+import { DashboardComponent } from './components/user/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { ClientService } from './services/client.service';
     SquareComponent,
     BoardComponent,
     SignUpComponent,
-    SignInComponent
+    SignInComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -44,6 +46,7 @@ import { ClientService } from './services/client.service';
       { path: 'sign-up', component: SignUpComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'tic-tac-toe', component: BoardComponent }
     ])
   ],
