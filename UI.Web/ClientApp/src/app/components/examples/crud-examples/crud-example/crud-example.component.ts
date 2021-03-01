@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 @Component({
   selector: 'crud-example',
   templateUrl: './crud-example.component.html',
-  styleUrls: ['./crud-example.component.css']
+  styleUrls: ['./crud-example.component.scss']
 })
 export class CrudExampleComponent implements OnInit {
 

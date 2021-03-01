@@ -1,0 +1,20 @@
+@import './themes/primary-theme';
+@import "~bootstrap-icons/font/bootstrap-icons.css";
+
+.dropdown-item:active{
+  background-color: map-get($theme-colors, "primary")
+}
+
+.navbar-dark .navbar-nav .nav-link{
+  color: #fff;
+}
+
+h1, h2, h3, h4, h5, h6, a{
+  color: map-get($theme-colors, "primary")
+}
+
+.form-control:focus{
+  border-color: map-get($theme-colors, "primary");
+  outline: 0;
+  box-shadow: 0 0 0 0.25rem rgb(map-get($theme-colors, "primary"), .25);
+}

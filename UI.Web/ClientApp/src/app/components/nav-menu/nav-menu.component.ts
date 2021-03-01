@@ -5,7 +5,7 @@ import { ClientService } from 'src/app/services/client.service';
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.component.html',
-  styleUrls: ['./nav-menu.component.css']
+  styleUrls: ['./nav-menu.component.scss']
 })
 export class NavMenuComponent {
   isExpanded = false;

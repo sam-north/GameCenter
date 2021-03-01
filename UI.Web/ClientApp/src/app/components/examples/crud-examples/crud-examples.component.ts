@@ -6,7 +6,7 @@ import { ApiService } from 'src/app/services/api.service';
 @Component({
   selector: 'crud-examples',
   templateUrl: './crud-examples.component.html',
-  styleUrls: ['./crud-examples.component.css']
+  styleUrls: ['./crud-examples.component.scss']
 })
 export class CrudExamplesComponent implements OnInit {
 
