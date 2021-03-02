@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CRUDExample } from 'src/app/models/CRUDExample';
-import { ApiService } from 'src/app/services/api.service';
 import { Location } from '@angular/common';
+import { GodService } from 'src/app/services/god.service';
 
 @Component({
   selector: 'crud-example',
@@ -14,7 +14,7 @@ export class CrudExampleComponent implements OnInit {
   model: CRUDExample = new CRUDExample();
   
   actionTitle: string = ""
-  constructor(private activatedRoute: ActivatedRoute, private api: ApiService, private location: Location, private router: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private god: GodService, private location: Location) { }
 
   ngOnInit(): void {
     let id : number = +this.activatedRoute.snapshot.params['id'];
@@ -24,7 +24,7 @@ export class CrudExampleComponent implements OnInit {
   }
 
   async load(id: number) {
-    this.model = await this.api.getCrudExample(id);
+    this.model = await this.god.api.getCrudExample(id);
   }
 
   back(){
@@ -32,7 +32,7 @@ export class CrudExampleComponent implements OnInit {
   }
 
   async save(){
-    const result = await (this.model.id === 0) ? this.api.createCrudExample(this.model) : this.api.updateCrudExample(this.model);
-    this.router.navigate(['/crud-examples']);
+    this.god.notifications.success('saved!');
+    this.god.router.navigate(['/crud-examples']);
   }
 }

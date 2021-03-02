@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SignIn } from 'src/app/models/SignIn';
-import { ApiService } from 'src/app/services/api.service';
-import { ClientService } from 'src/app/services/client.service';
+import { GodService } from 'src/app/services/god.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -16,17 +14,20 @@ export class SignInComponent implements OnInit {
     password: null
   };
 
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private god: GodService) { }
 
   ngOnInit(): void {
   }
 
-  async signIn(){        
+  async signIn(){      
+    this.god.notifications.removeAll();
     if (!this.model.email || !this.model.password) {
-      alert("email and password required");
+      this.god.notifications.danger("email and password required");
       return;
     }
-    const result = await this.api.signInUser(this.model);
-    this.router.navigate(['dashboard']);
+    const result = await this.god.api.signInUser(this.model);
+    this.god.notifications.info("you are signed in");
+    this.god.router.navigate(['dashboard']);
   }
 }
+

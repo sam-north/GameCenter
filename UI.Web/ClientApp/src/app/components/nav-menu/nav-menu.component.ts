@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { ApiService } from 'src/app/services/api.service';
-import { ClientService } from 'src/app/services/client.service';
+import { GodService } from 'src/app/services/god.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -9,8 +8,8 @@ import { ClientService } from 'src/app/services/client.service';
 })
 export class NavMenuComponent {
   isExpanded = false;
-  get isSignedin (): boolean { return this.clientService.isSignedIn; };
-  constructor(private api: ApiService, private clientService: ClientService){
+  get isSignedin (): boolean { return this.god.client.isSignedIn; };
+  constructor(private god: GodService){
     
   }
 
@@ -23,6 +22,8 @@ export class NavMenuComponent {
   }
 
   async signOut(){
-    await this.api.signOutUser();
+    this.god.notifications.removeAll();
+    await this.god.api.signOutUser();
+    this.god.notifications.info('you have been signed out.');
   }
 }

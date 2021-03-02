@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { HomeComponent } from './components/home/home.component';
@@ -18,6 +18,31 @@ import { SignInComponent } from './components/account/sign-in/sign-in.component'
 import { ErrorInterceptorProvider } from './utilities/ErrorInterceptor';
 import { ClientService } from './services/client.service';
 import { DashboardComponent } from './components/account/dashboard/dashboard.component';
+import { MancalaAboutComponent } from './components/games/mancala/mancala-about/mancala-about.component';
+import { CanActivateGuard } from './services/can-activate-guard.service';
+import { Notifier } from './utilities/notifications/Notifier';
+import { ToastrNotifier } from './utilities/notifications/implementations/ToastrNotifier';
+import { NotificationService } from './services/notification.service';
+import { GodService } from './services/god.service';
+
+const anonymousRoutes: Routes = [
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'counter', component: CounterComponent },
+  { path: 'fetch-data', component: FetchDataComponent },
+  { path: 'sign-in', component: SignInComponent },
+  { path: 'sign-up', component: SignUpComponent },
+];
+const authenticatedRoutes: Routes = [
+  { 
+    path: '', canActivate: [CanActivateGuard], children: [
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'crud-examples', component: CrudExamplesComponent },
+      { path: 'crud-example/:id', component: CrudExampleComponent },
+      { path: 'tic-tac-toe', component: BoardComponent },
+      { path: '**', component: HomeComponent },
+    ]
+  }
+];
 
 @NgModule({
   declarations: [
@@ -32,28 +57,23 @@ import { DashboardComponent } from './components/account/dashboard/dashboard.com
     BoardComponent,
     SignUpComponent,
     SignInComponent,
-    DashboardComponent
+    DashboardComponent,
+    MancalaAboutComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-      { path: 'sign-in', component: SignInComponent },
-      { path: 'sign-up', component: SignUpComponent },
-      { path: 'crud-examples', component: CrudExamplesComponent },
-      { path: 'crud-example/:id', component: CrudExampleComponent },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'tic-tac-toe', component: BoardComponent }
-    ])
+    RouterModule.forRoot([...anonymousRoutes, ...authenticatedRoutes])
   ],
   providers: [
     ApiService, 
     ErrorInterceptorProvider,
-    ClientService
+    ClientService,    
+    CanActivateGuard,
+    GodService,
+    NotificationService,
+    { provide: Notifier, useClass: ToastrNotifier }
   ],
   bootstrap: [AppComponent]
 })

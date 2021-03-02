@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { SignUp } from 'src/app/models/SignUp';
-import { ApiService } from 'src/app/services/api.service';
+import { GodService } from 'src/app/services/god.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -15,21 +14,24 @@ export class SignUpComponent implements OnInit {
     password: null,
     confirmPassword: null
   };
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private god: GodService) { }
 
   ngOnInit(): void {
   }
 
   async submitUser(){
-    if (this.signUpModel.confirmPassword != this.signUpModel.password) {
-      alert("Passwords don't match");
+    this.god.notifications.removeAll();
+    if (this.signUpModel.email && this.signUpModel.password && this.signUpModel.confirmPassword) {
+      if (this.signUpModel.confirmPassword != this.signUpModel.password) {
+        this.god.notifications.danger("Passwords don't match");
+      }
+      if (this.signUpModel.email.length && this.signUpModel.password.length && this.signUpModel.confirmPassword.length
+        && this.signUpModel.confirmPassword == this.signUpModel.password) {
+        this.god.router.navigate(['/sign-in']);
+      }
     }
-
-    if (this.signUpModel.email.length && this.signUpModel.password.length && this.signUpModel.confirmPassword.length
-      && this.signUpModel.confirmPassword == this.signUpModel.password) {
-      const result = await this.api.signUpUser(this.signUpModel);
-      this.router.navigate(['/sign-in']);
-    }
+    else
+      this.god.notifications.danger("email and passwords required");
 
   }
 

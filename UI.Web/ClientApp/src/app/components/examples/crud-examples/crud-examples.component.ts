@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { CRUDExample } from 'src/app/models/CRUDExample';
-import { ApiService } from 'src/app/services/api.service';
+import { GodService } from 'src/app/services/god.service';
 
 @Component({
   selector: 'crud-examples',
@@ -12,26 +11,27 @@ export class CrudExamplesComponent implements OnInit {
 
   crudExamples: CRUDExample[] = []; 
 
-  constructor(private api: ApiService, private router: Router) { }
+  constructor(private god: GodService) { }
 
   async ngOnInit(): Promise<void> {
     await this.load();
   }  
 
   private async load() {
-    this.crudExamples = await this.api.getCrudExamples();
+    this.crudExamples = await this.god.api.getCrudExamples();
   }
 
   create(){
-    this.router.navigate(['/crud-example', 0]);
+    this.god.router.navigate(['/crud-example', 0]);
   }
 
   edit(crudExample: CRUDExample){
-    this.router.navigate(['/crud-example', crudExample.id]);
+    this.god.router.navigate(['/crud-example', crudExample.id]);
   }
 
   async delete(crudExample: CRUDExample){
-    await this.api.deleteCrudExample(crudExample.id);
-    this.load();
+    await this.god.api.deleteCrudExample(crudExample.id);
+    await this.load();
+    this.god.notifications.success('deleted');
   }
 }
