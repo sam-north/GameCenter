@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Core.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Core.Logic.Interfaces
 {
-    interface IGameLogic
+    public interface IGameLogic
     {
+        ICollection<Game> GetActiveGames();
     }
 }
