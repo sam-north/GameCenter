@@ -1,10 +1,10 @@
 ﻿namespace Core.Models.Constants
 {
-    public struct Games
+    public enum Games
     {
-        public const string Mancala = "Mancala";
-        public const string ConnectFour = "ConnectFour";
-        public const string Checkers = "Checkers";
-        public const string TicTacToe = "TicTacToe";
+        Mancala = 1,
+        ConnectFour = 2,
+        Checkers = 3,
+        TicTacToe = 4,
     }
 }

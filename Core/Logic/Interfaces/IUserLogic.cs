@@ -5,6 +5,7 @@ namespace Core.Logic.Interfaces
 {
     public interface IUserLogic
     {
+        User Get(string email);
         User Create(User model);
         Response<User> SignIn(User model);
     }

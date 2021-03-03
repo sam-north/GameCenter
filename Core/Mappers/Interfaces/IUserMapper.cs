@@ -5,7 +5,7 @@ namespace Core.Mappers.Interfaces
 {
     public interface IUserMapper
     {
-        User Map(UserSignUpDto dto);
-        User Map(UserSignInDto dto);
+        User Map(UserSignUpDto source);
+        User Map(UserSignInDto source);
     }
 }

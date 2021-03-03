@@ -12,5 +12,6 @@ namespace Core.Models
         public Guid GameInstanceId { get; set; }
         public int UserId { get; set; }
         public string Role { get; set; }
+        public User User { get; set; }
     }
 }

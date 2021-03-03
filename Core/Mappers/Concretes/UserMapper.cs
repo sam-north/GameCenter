@@ -6,20 +6,20 @@ namespace Core.Mappers.Concretes
 {
     public class UserMapper : IUserMapper
     {
-        public User Map(UserSignUpDto dto)
+        public User Map(UserSignUpDto source)
         {
-            var entity = new User();
-            entity.Email = dto.Email;
-            entity.Password = dto.Password;
-            return entity;
+            var target = new User();
+            target.Email = source.Email;
+            target.Password = source.Password;
+            return target;
         }
 
-        public User Map(UserSignInDto dto)
+        public User Map(UserSignInDto source)
         {
-            var entity = new User();
-            entity.Email = dto.Email;
-            entity.Password = dto.Password;
-            return entity;
+            var target = new User();
+            target.Email = source.Email;
+            target.Password = source.Password;
+            return target;
         }
     }
 }

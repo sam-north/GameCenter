@@ -26,10 +26,15 @@ namespace Core.Logic.Concretes
             return model;
         }
 
+        public User Get(string email)
+        {
+            return ModelContext.Users.SingleOrDefault(x => x.Email == email);
+        }
+
         public Response<User> SignIn(User model)
         {
             var response = new Response<User>();
-            var dbUser = ModelContext.Users.SingleOrDefault(x => x.Email == model.Email);
+            var dbUser = Get(model.Email);
             if (dbUser == null)
             {
                 response.Errors.Add("Invalid email or password");
