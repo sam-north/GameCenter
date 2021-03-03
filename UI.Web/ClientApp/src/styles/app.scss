@@ -1,12 +1,7 @@
-@import './themes/primary-theme';
-@import '~toastr/toastr.scss';
+@import './theme';
 
 .dropdown-item:active{
   background-color: map-get($theme-colors, "primary")
-}
-
-.navbar-dark .navbar-nav .nav-link{
-  color: #fff;
 }
 
 h1, h2, h3, h4, h5, h6, a{
@@ -17,54 +12,4 @@ h1, h2, h3, h4, h5, h6, a{
   border-color: map-get($theme-colors, "primary");
   outline: 0;
   box-shadow: 0 0 0 0.25rem rgb(map-get($theme-colors, "primary"), .25);
-}
-
-.toast-success{
-  color: map-get($theme-colors, "primary") !important;
-  background-color: map-get($theme-colors, "success");
-}
-.toast-error{
-  color: map-get($theme-colors, "primary") !important;  
-  background-color: map-get($theme-colors, "danger") !important;
-}
-.toast-info{    
-  color: map-get($theme-colors, "primary") !important;
-  background-color: #efefef !important;
-}
-.toast-warning{    
-  color: map-get($theme-colors, "primary") !important;
-  background-color: map-get($theme-colors, "warning") !important;
-}
-button.toast-close-button{
-  color: map-get($theme-colors, "primary") !important;
-}
-#toast-container > div.toast {
-    background-image: none !important;
-}
-#toast-container > div.toast:before {
-  position: relative;
-  font-family: FontAwesome;
-  font-size: 24px;
-  line-height: 18px;
-  float: left;
-  margin-left: -1em;
-  color: map-get($theme-colors, "primary") !important;
-  padding-right: 0.5em;
-  margin-right: 0.5em;
-  min-width: 40px;
-  text-align: center;
-}     
-
-#toast-container > .toast-warning:before {
-  content: "\f071";
-}
-
-#toast-container > .toast-error:before {
-  content: "\f12a";
-}
-#toast-container > .toast-info:before {
-  content: "\f05a";
-}
-#toast-container > .toast-success:before {
-  content: "\f00c";
 }

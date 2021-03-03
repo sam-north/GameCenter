@@ -24,6 +24,7 @@ import { Notifier } from './utilities/notifications/Notifier';
 import { ToastrNotifier } from './utilities/notifications/implementations/ToastrNotifier';
 import { NotificationService } from './services/notification.service';
 import { GodService } from './services/god.service';
+import { StyleExamplesComponent } from './components/examples/style-examples/style-examples.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -36,6 +37,7 @@ const authenticatedRoutes: Routes = [
   { 
     path: '', canActivate: [CanActivateGuard], children: [
       { path: 'dashboard', component: DashboardComponent },
+      { path: 'style-examples', component: StyleExamplesComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },
       { path: 'tic-tac-toe', component: BoardComponent },
@@ -58,7 +60,8 @@ const authenticatedRoutes: Routes = [
     SignUpComponent,
     SignInComponent,
     DashboardComponent,
-    MancalaAboutComponent
+    MancalaAboutComponent,
+    StyleExamplesComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
