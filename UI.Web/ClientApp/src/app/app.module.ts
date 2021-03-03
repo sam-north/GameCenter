@@ -25,6 +25,7 @@ import { ToastrNotifier } from './utilities/notifications/implementations/Toastr
 import { NotificationService } from './services/notification.service';
 import { GodService } from './services/god.service';
 import { StyleExamplesComponent } from './components/examples/style-examples/style-examples.component';
+import { NewGameComponent } from './components/games/all/new-game/new-game.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -61,7 +62,8 @@ const authenticatedRoutes: Routes = [
     SignInComponent,
     DashboardComponent,
     MancalaAboutComponent,
-    StyleExamplesComponent
+    StyleExamplesComponent,
+    NewGameComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

@@ -21,6 +21,10 @@ export class NavMenuComponent {
     this.isExpanded = !this.isExpanded;
   }
 
+  newGame(){
+    
+  }
+
   async signOut(){
     this.god.notifications.removeAll();
     await this.god.api.signOutUser();
