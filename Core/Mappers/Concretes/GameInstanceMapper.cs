@@ -11,6 +11,7 @@ namespace Core.Mappers.Concretes
         {
             var target = new GameInstanceDto();
             target.Id = source.Id;
+            target.GameDisplayName = source.Game.DisplayName;
             target.DateCreated = source.DateCreated;
             target.GameId = source.GameId;
             target.State = Map(source.State);

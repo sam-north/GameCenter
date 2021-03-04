@@ -11,7 +11,7 @@ using System;
 namespace UI.Web.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class UserGameController : ControllerBase
     {
         public IGameInstanceLogic GameInstanceLogic { get; }
@@ -38,6 +38,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{id}")]
         public ActionResult<Response<object>> Get(Guid id)
         {
             var gameInstance = GameInstanceLogic.Get(id);

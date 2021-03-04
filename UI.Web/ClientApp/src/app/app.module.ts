@@ -26,6 +26,7 @@ import { NotificationService } from './services/notification.service';
 import { GodService } from './services/god.service';
 import { StyleExamplesComponent } from './components/examples/style-examples/style-examples.component';
 import { NewGameComponent } from './components/games/all/new-game/new-game.component';
+import { PlayComponent } from './components/games/all/play/play.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -39,6 +40,8 @@ const authenticatedRoutes: Routes = [
     path: '', canActivate: [CanActivateGuard], children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'style-examples', component: StyleExamplesComponent },
+      { path: 'new-game', component: NewGameComponent },
+      { path: 'play/:id', component: PlayComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },
       { path: 'tic-tac-toe', component: BoardComponent },
@@ -63,7 +66,8 @@ const authenticatedRoutes: Routes = [
     DashboardComponent,
     MancalaAboutComponent,
     StyleExamplesComponent,
-    NewGameComponent
+    NewGameComponent,
+    PlayComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

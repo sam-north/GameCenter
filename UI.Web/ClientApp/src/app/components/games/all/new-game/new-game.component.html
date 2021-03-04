@@ -1,2 +1,15 @@
 
-new game
+<h2></h2>
+<form>
+    <label>Game</label>
+    <select class="form-control" name="game" [(ngModel)]="selectedGame">
+        <option *ngFor="let game of games" [ngValue]="game">{{game.displayName}}</option>
+    </select>
+
+    <div>
+        <label>Email</label>
+        <input type="text" name="email" autofocus id="email" class="form-control" placeholder="Email" [(ngModel)]="opponentEmail">
+    </div>
+    <input type="submit" class="btn btn-primary" (click)="submit()" value="GLHF">
+</form>
+

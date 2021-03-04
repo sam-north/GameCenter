@@ -14,6 +14,7 @@ namespace Core.Models
         public DateTimeOffset DateCreated { get; set; }
         public bool IsDeleted { get; set; }
 
+        public Game Game { get; set; }
         public GameInstanceState State { get; set; }
         public ICollection<GameInstanceUser> Users { get; set; } = new List<GameInstanceUser>();
     }

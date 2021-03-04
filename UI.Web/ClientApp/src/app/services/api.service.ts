@@ -5,7 +5,12 @@ import { SignIn } from '../models/SignIn';
 import { SignUp } from '../models/SignUp';
 import { catchError } from 'rxjs/operators';
 import { Observable, throwError } from 'rxjs';
+import { Response} from '../models/Response';
 import { Client } from '../models/Client';
+import { GameDto } from '../models/GameDto';
+import { CreateGameInstanceDto } from '../models/CreateGameInstanceDto';
+import { GameInstanceUserDto } from '../models/GameInstanceUserDto';
+import { GameInstanceDto } from '../models/GameInstanceDto';
 
 @Injectable({
   providedIn: 'root'
@@ -56,7 +61,20 @@ export class ApiService {
   signOutUser(): Promise<void> {
     return this.http.post<void>(`${this.rootUrl}/User/SignOut`, null).toPromise();
   }
-
+  getGames(): Promise<GameDto[]> {
+    return this.http.get<GameDto[]>(`${this.rootUrl}/game`).toPromise();
+  }
+  newGame(dto: CreateGameInstanceDto): Promise<void> {
+    return this.http.post<void>(`${this.rootUrl}/UserGame/New`, 
+    { 
+      opponentEmail: dto.opponentEmail,
+      gameId: dto.gameId
+    }
+    ).toPromise();
+  }
+  getGameInstance(id: string): Promise<Response<GameInstanceDto>> {
+    return this.http.get<Response<GameInstanceDto>>(`${this.rootUrl}/usergame/${id}`).toPromise();
+  }
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

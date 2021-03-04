@@ -36,7 +36,7 @@
             </ul>
           </li>
         </ul>   
-        <button class="btn btn-outline-success btn-sm" *ngIf="isSignedin" (click)="newGame()">New game <i class="fas fa-plus"></i></button>     
+        <button class="btn btn-outline-success btn-sm" *ngIf="isSignedin" [routerLink]="['/new-game']">New game <i class="fas fa-plus"></i></button>     
       </div>
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }" >
         <ul class="navbar-nav flex-grow">

@@ -37,7 +37,7 @@ namespace Core.Logic.Concretes
 
         public GameInstance Get(Guid id)
         {
-            var entity = ModelContext.GameInstances.Include(x => x.Users).ThenInclude(x => x.User).SingleOrDefault(x => x.Id == id);
+            var entity = ModelContext.GameInstances.Include(x => x.Game).Include(x => x.Users).ThenInclude(x => x.User).SingleOrDefault(x => x.Id == id);
             if (entity != null)
                 entity.State = ModelContext.GameInstanceStates.Where(x => x.GameInstanceId == id).OrderByDescending(x => x.DateCreated).SingleOrDefault();
             return entity;
@@ -80,8 +80,8 @@ namespace Core.Logic.Concretes
                 ModelContext.SaveChanges();
             }
 
-            SaveState(entity.GameId, entity.Id, entity.State);
-            SaveUsers(entity.Id, entity.Users);
+            SaveState(entity.GameId, entity.Id, modelToSave.State);
+            SaveUsers(entity.Id, modelToSave.Users);
 
             ModelContext.SaveChanges();
             return entity;
@@ -153,7 +153,7 @@ namespace Core.Logic.Concretes
             entity.GameInstanceId = gameInstanceId;
 
             var gameStrategy = GameStrategyProvider.Provide(gameId);
-            entity.DataAsJson = !string.IsNullOrWhiteSpace(modelToSave.DataAsJson) ? modelToSave.DataAsJson : gameStrategy.GetDefaultGameState();
+            entity.DataAsJson = !string.IsNullOrWhiteSpace(modelToSave?.DataAsJson) ? modelToSave.DataAsJson : gameStrategy.GetDefaultGameState();
 
             ModelContext.GameInstanceStates.Add(entity);
         }

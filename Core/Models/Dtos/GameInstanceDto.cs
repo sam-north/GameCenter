@@ -7,6 +7,7 @@ namespace Core.Models.Dtos
     {
         public Guid Id { get; set; }
         public int GameId { get; set; }
+        public string GameDisplayName { get; set; }
         public DateTimeOffset DateCreated { get; set; }
 
         public GameInstanceStateDto State { get; set; }
