@@ -11,7 +11,7 @@ using System;
 namespace UI.Web.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class UserGameController : ControllerBase
     {
         public IGameInstanceLogic GameInstanceLogic { get; }

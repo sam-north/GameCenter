@@ -21,8 +21,23 @@ export class NewGameComponent implements OnInit {
   }
 
   async submit(){
-    const response = await this.god.api.newGame({opponentEmail:this.opponentEmail, gameId: this.selectedGame.id});
-    
+    if (this.isValid()) {
+      const response = await this.god.api.newGame({opponentEmail:this.opponentEmail, gameId: this.selectedGame.id});
+      this.god.notifications.success('game created');  
+      this.god.router.navigate(['/play', response.data.id]);
+      return;
+    }
+  }
+  isValid(): boolean {
+    this.god.notifications.removeAll();
+    let errors: string[] = [];
+    if (!this.selectedGame) 
+      errors.push('A game must be selected');
+    if (!this.opponentEmail) 
+      errors.push('A opponent email is required');
+    if (errors.length) 
+      this.god.notifications.dangerList(errors);
+    return errors.length <= 0;
   }
 
 }

@@ -10,11 +10,13 @@ namespace Core.Validators.Concretes
     {
         public IGameLogic GameLogic { get; }
         public IUserLogic UserLogic { get; }
+        public IRequestContext RequestContext { get; }
 
-        public GameInstanceValidator(IGameLogic gameLogic, IUserLogic userLogic)
+        public GameInstanceValidator(IGameLogic gameLogic, IUserLogic userLogic, IRequestContext requestContext)
         {
             GameLogic = gameLogic;
             UserLogic = userLogic;
+            RequestContext = requestContext;
         }
 
         public Response<string> Validate(CreateGameInstanceDto dto)
@@ -24,7 +26,7 @@ namespace Core.Validators.Concretes
             var games = GameLogic.GetActiveGames();
             if (!games.Any(x => x.Id == dto.GameId))
                 response.Errors.Add("That game is invalid.");
-            if (string.IsNullOrWhiteSpace(dto.OpponentEmail) || UserLogic.Get(dto.OpponentEmail) == null)
+            if (string.IsNullOrWhiteSpace(dto.OpponentEmail) || dto.OpponentEmail == RequestContext.Email || UserLogic.Get(dto.OpponentEmail) == null)
                 response.Errors.Add("That email address is invalid.");
             return response;
         }

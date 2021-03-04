@@ -64,8 +64,8 @@ export class ApiService {
   getGames(): Promise<GameDto[]> {
     return this.http.get<GameDto[]>(`${this.rootUrl}/game`).toPromise();
   }
-  newGame(dto: CreateGameInstanceDto): Promise<void> {
-    return this.http.post<void>(`${this.rootUrl}/UserGame/New`, 
+  newGame(dto: CreateGameInstanceDto): Promise<Response<GameInstanceDto>> {
+    return this.http.post<Response<GameInstanceDto>>(`${this.rootUrl}/UserGame/New`, 
     { 
       opponentEmail: dto.opponentEmail,
       gameId: dto.gameId
@@ -73,7 +73,7 @@ export class ApiService {
     ).toPromise();
   }
   getGameInstance(id: string): Promise<Response<GameInstanceDto>> {
-    return this.http.get<Response<GameInstanceDto>>(`${this.rootUrl}/usergame/${id}`).toPromise();
+    return this.http.get<Response<GameInstanceDto>>(`${this.rootUrl}/usergame/get/${id}`).toPromise();
   }
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

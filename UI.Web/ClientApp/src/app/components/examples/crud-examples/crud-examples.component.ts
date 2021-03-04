@@ -17,7 +17,7 @@ export class CrudExamplesComponent implements OnInit {
     await this.load();
   }  
 
-  private async load() {
+  async load() {
     this.crudExamples = await this.god.api.getCrudExamples();
   }
 
