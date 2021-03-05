@@ -28,12 +28,14 @@ import { StyleExamplesComponent } from './components/examples/style-examples/sty
 import { NewGameComponent } from './components/games/all/new-game/new-game.component';
 import { PlayComponent } from './components/games/all/play/play.component';
 import { CheckersAboutComponent } from './components/games/checkers/checkers-about/checkers-about.component';
+import { ConnectFourComponent } from './components/games/connect-four/connect-four/connect-four.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'counter', component: CounterComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   { path: 'mancala', component: MancalaAboutComponent },
+  { path: 'connect-four', component: ConnectFourComponent },
   { path: 'checkers', component: CheckersAboutComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
@@ -71,7 +73,8 @@ const authenticatedRoutes: Routes = [
     StyleExamplesComponent,
     NewGameComponent,
     PlayComponent,
-    CheckersAboutComponent
+    CheckersAboutComponent,
+    ConnectFourComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
