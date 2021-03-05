@@ -27,6 +27,7 @@ export class SignUpComponent implements OnInit {
       }
       if (this.signUpModel.email.length && this.signUpModel.password.length && this.signUpModel.confirmPassword.length
         && this.signUpModel.confirmPassword == this.signUpModel.password) {
+          this.god.api.signUpUser(this.signUpModel);
         this.god.router.navigate(['/sign-in']);
       }
     }

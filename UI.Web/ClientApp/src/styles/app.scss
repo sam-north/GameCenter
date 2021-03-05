@@ -11,5 +11,5 @@ h1, h2, h3, h4, h5, h6, a{
 .form-control:focus{
   border-color: map-get($theme-colors, "primary");
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgb(map-get($theme-colors, "primary"), .25);
+  box-shadow: 0 0 0 0.25rem RGB(map-get($theme-colors, "primary"), .25);
 }

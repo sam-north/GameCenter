@@ -27,12 +27,14 @@ import { GodService } from './services/god.service';
 import { StyleExamplesComponent } from './components/examples/style-examples/style-examples.component';
 import { NewGameComponent } from './components/games/all/new-game/new-game.component';
 import { PlayComponent } from './components/games/all/play/play.component';
+import { CheckersAboutComponent } from './components/games/checkers/checkers-about/checkers-about.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'counter', component: CounterComponent },
   { path: 'fetch-data', component: FetchDataComponent },
   { path: 'mancala', component: MancalaAboutComponent },
+  { path: 'checkers', component: CheckersAboutComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
 ];
@@ -68,7 +70,8 @@ const authenticatedRoutes: Routes = [
     MancalaAboutComponent,
     StyleExamplesComponent,
     NewGameComponent,
-    PlayComponent
+    PlayComponent,
+    CheckersAboutComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
