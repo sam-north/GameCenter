@@ -3,14 +3,12 @@ import { Injectable } from '@angular/core';
 import { CRUDExample } from '../models/CRUDExample';
 import { SignIn } from '../models/SignIn';
 import { SignUp } from '../models/SignUp';
-import { catchError } from 'rxjs/operators';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 import { Response} from '../models/Response';
-import { Client } from '../models/Client';
 import { GameDto } from '../models/GameDto';
 import { CreateGameInstanceDto } from '../models/CreateGameInstanceDto';
-import { GameInstanceUserDto } from '../models/GameInstanceUserDto';
 import { GameInstanceDto } from '../models/GameInstanceDto';
+import { UserGameInstanceStatelessDto } from '../models/UserGameInstanceStatelessDto';
 
 @Injectable({
   providedIn: 'root'
@@ -74,6 +72,9 @@ export class ApiService {
   }
   getGameInstance(id: string): Promise<Response<GameInstanceDto>> {
     return this.http.get<Response<GameInstanceDto>>(`${this.rootUrl}/usergame/get/${id}`).toPromise();
+  }
+  getUserGames(): Promise<Response<UserGameInstanceStatelessDto[]>> {
+    return this.http.get<Response<UserGameInstanceStatelessDto[]>>(`${this.rootUrl}/usergame/get`).toPromise();
   }
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {

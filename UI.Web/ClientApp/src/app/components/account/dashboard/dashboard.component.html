@@ -1,2 +1,23 @@
 <h3 class="alert alert-success">This is the user dashboard after they sign in</h3>
 <p>We can put active games, game history, etc here.</p>
+
+<h3>Your Active Games</h3>
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="userGames.length">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Game</th>
+        <th>Started On</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let userGame of userGames">
+        <td>
+            <button class="btn btn-sm btn-light mr-3" (click)="play(userGame)"><i class="fas fa-play"></i></button>
+            <!-- <button class="btn btn-sm btn-danger" (click)="delete(userGame)"><i class="fas fa-trash"></i></button> -->
+        </td>
+        <td>{{ userGame.gameDisplayName }}</td>
+        <td>{{ userGame.dateCreated | date:'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>

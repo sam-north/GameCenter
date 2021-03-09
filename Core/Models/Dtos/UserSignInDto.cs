@@ -1,4 +1,5 @@
-﻿namespace Core.Models.Dtos
+﻿
+namespace Core.Models.Dtos
 {
     public class UserSignInDto
     {

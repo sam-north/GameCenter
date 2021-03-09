@@ -9,9 +9,11 @@ namespace Core.Logic.Interfaces
     public interface IGameInstanceLogic
     {
         ICollection<GameInstance> Get();
+        ICollection<GameInstance> GetCurrentUserGameInstancesWithoutGameStates();
         GameInstance Get(Guid id);
-        Response<GameInstance> New(CreateGameInstanceDto dto);
         GameInstance Save(GameInstance modelToSave);
         void Delete(Guid id);
+        Response<GameInstance> New(CreateGameInstanceDto dto);
+        Response<GameInstance> Play(PlayGameInstanceDto dto);
     }
 }

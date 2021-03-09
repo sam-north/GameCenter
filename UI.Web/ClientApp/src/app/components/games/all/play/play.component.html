@@ -1,6 +1,6 @@
 <p>You are playing {{model.gameDisplayName}}</p>
 
-<p>Created on {{model.dateCreated}}</p>
+<p>Created on {{model.dateCreated | date:'medium'}}</p>
 <label for="">Players</label>
 <ul>
     <li *ngFor="let user of model.users">{{user.userEmail}}</li>

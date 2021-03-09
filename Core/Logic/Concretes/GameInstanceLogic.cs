@@ -35,43 +35,38 @@ namespace Core.Logic.Concretes
             return results;
         }
 
+        public ICollection<GameInstance> GetCurrentUserGameInstancesWithoutGameStates()
+        {
+            var results = new List<GameInstance>();
+
+            results = ModelContext.GameInstances
+                                                .Include(x => x.Game)
+                                                .Include(x => x.Users)
+                                                    .ThenInclude(x => x.User)
+                                                .Where(x => !x.IsDeleted
+                                                            && x.Users.Select(x => x.UserId).Contains(RequestContext.UserId))
+                                                .OrderBy(x => x.DateCreated).ToList();
+            return results;
+        }
+
         public GameInstance Get(Guid id)
         {
-            var entity = ModelContext.GameInstances.Include(x => x.Game).Include(x => x.Users).ThenInclude(x => x.User).SingleOrDefault(x => x.Id == id);
+            var entity = ModelContext.GameInstances
+                                                    .Include(x => x.Game)
+                                                    .Include(x => x.Users)
+                                                        .ThenInclude(x => x.User)
+                                                    .SingleOrDefault(x => x.Id == id);
             if (entity != null)
                 entity.State = ModelContext.GameInstanceStates.Where(x => x.GameInstanceId == id).OrderByDescending(x => x.DateCreated).SingleOrDefault();
             return entity;
         }
 
-        public Response<GameInstance> New(CreateGameInstanceDto dto)
-        {
-            var response = new Response<GameInstance>();
-            var newInstance = new GameInstance();
-            newInstance.GameId = dto.GameId;
-
-            newInstance.Users.Add(new GameInstanceUser
-            {
-                UserId = RequestContext.UserId,
-                Role = GameInstanceRoles.Player.ToString()
-            });
-            var opposingUser = UserLogic.Get(dto.OpponentEmail);
-            newInstance.Users.Add(new GameInstanceUser
-            {
-                UserId = opposingUser.Id,
-                Role = GameInstanceRoles.Player.ToString()
-            });
-            response.Data = Save(newInstance);
-            return response;
-        }
-
         public GameInstance Save(GameInstance modelToSave)
         {
-            var entity = ModelContext.GameInstances.SingleOrDefault(x => x.Id == modelToSave.Id);
-            var isCreating = false;
+            var entity = Get(modelToSave.Id); //ModelContext.GameInstances.SingleOrDefault(x => x.Id == modelToSave.Id);
 
             if (entity == null)
             {
-                isCreating = true;
                 entity = new GameInstance();
                 entity.DateCreated = DateTimeOffset.Now;
                 entity.GameId = modelToSave.GameId;
@@ -80,7 +75,7 @@ namespace Core.Logic.Concretes
                 ModelContext.SaveChanges();
             }
 
-            SaveState(entity.GameId, entity.Id, modelToSave.State);
+            SaveState(entity.GameId, entity.Id, modelToSave);
             SaveUsers(entity.Id, modelToSave.Users);
 
             ModelContext.SaveChanges();
@@ -145,7 +140,7 @@ namespace Core.Logic.Concretes
             }
         }
 
-        private void SaveState(int gameId, Guid gameInstanceId, GameInstanceState modelToSave)
+        private void SaveState(int gameId, Guid gameInstanceId, GameInstance modelToSave)
         {
             var entity = new GameInstanceState();
 
@@ -153,9 +148,46 @@ namespace Core.Logic.Concretes
             entity.GameInstanceId = gameInstanceId;
 
             var gameStrategy = GameStrategyProvider.Provide(gameId);
-            entity.DataAsJson = !string.IsNullOrWhiteSpace(modelToSave?.DataAsJson) ? modelToSave.DataAsJson : gameStrategy.GetDefaultGameState();
+            entity.DataAsJson = !string.IsNullOrWhiteSpace(modelToSave.State?.DataAsJson) ? modelToSave.State.DataAsJson : gameStrategy.GetDefaultGameState(modelToSave);
 
             ModelContext.GameInstanceStates.Add(entity);
+        }
+
+        public Response<GameInstance> New(CreateGameInstanceDto dto)
+        {
+            var response = new Response<GameInstance>();
+            var gameInstance = new GameInstance();
+            gameInstance.GameId = dto.GameId;
+
+            gameInstance.Users.Add(new GameInstanceUser
+            {
+                UserId = RequestContext.UserId,
+                Role = GameInstanceRoles.Player.ToString()
+            });
+            var opposingUser = UserLogic.Get(dto.OpponentEmail);
+            gameInstance.Users.Add(new GameInstanceUser
+            {
+                UserId = opposingUser.Id,
+                Role = GameInstanceRoles.Player.ToString()
+            });
+            response.Data = Save(gameInstance);
+            return response;
+        }
+
+        public Response<GameInstance> Play(PlayGameInstanceDto dto)
+        {
+            var response = new Response<GameInstance>();
+            var gameInstance = Get(dto.Id);
+            var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
+
+            throw new NotImplementedException();
+            //feedback messages in LoadAndPlay isn't used.  Needs to be errors or messages.
+
+            //var newGameStateAsJsonStringResponse = gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput);
+
+            //SaveState(gameInstance.GameId, )
+            //response.Data = Save(gameInstance);
+            return response;
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Core.Framework.Models
 {
-    public class Response<T> where T : class
+    public class Response<T> : IResponse<T> where T : class
     {
         public ICollection<string> Errors { get; set; } = new List<string>();
         public ICollection<string> Messages { get; set; } = new List<string>();

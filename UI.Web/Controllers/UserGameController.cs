@@ -2,11 +2,11 @@
 using Core.Framework.Models;
 using Core.Logic.Interfaces;
 using Core.Mappers.Interfaces;
-using Core.Models;
 using Core.Models.Dtos;
 using Core.Validators.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace UI.Web.Controllers
 {
@@ -31,9 +31,21 @@ namespace UI.Web.Controllers
             var validationResponse = GameInstanceValidator.Validate(dto);
             if (!validationResponse.IsValid) return BadRequest(validationResponse);
 
-            var newGameInstanceResponse = GameInstanceLogic.New(dto);
-            var response = ResponseMapper.Map<GameInstance, GameInstanceDto>(newGameInstanceResponse);
-            response.Data = GameInstanceMapper.Map(newGameInstanceResponse.Data);
+            var gameInstanceResponse = GameInstanceLogic.New(dto);
+
+            var response = ResponseMapper.MapMetadata<GameInstanceDto>(gameInstanceResponse);
+            response.Data = GameInstanceMapper.Map(gameInstanceResponse.Data);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public ActionResult<Response<object>> Get()
+        {
+            var gameInstances = GameInstanceLogic.GetCurrentUserGameInstancesWithoutGameStates();
+            if (gameInstances == null) return new EmptyResult();
+
+            var response = new Response<ICollection<UserGameInstanceStatelessDto>>();
+            response.Data = GameInstanceMapper.Map(gameInstances);
             return Ok(response);
         }
 
@@ -46,6 +58,19 @@ namespace UI.Web.Controllers
 
             var response = new Response<GameInstanceDto>();
             response.Data = GameInstanceMapper.Map(gameInstance);
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public ActionResult<Response<object>> Play(PlayGameInstanceDto dto)
+        {
+            var validationResponse = GameInstanceValidator.Validate(dto);
+            if (!validationResponse.IsValid) return BadRequest(validationResponse);
+
+            var gameInstanceResponse = GameInstanceLogic.Play(dto);
+
+            var response = ResponseMapper.MapMetadata<GameInstanceDto>(gameInstanceResponse);
+            response.Data = GameInstanceMapper.Map(gameInstanceResponse.Data);
             return Ok(response);
         }
     }

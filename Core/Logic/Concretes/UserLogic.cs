@@ -4,6 +4,7 @@ using Core.Logic.Interfaces;
 using Core.Models;
 using CryptSharp;
 using System.Linq;
+
 using System.Text;
 
 namespace Core.Logic.Concretes
@@ -59,7 +60,7 @@ namespace Core.Logic.Concretes
 
         private bool VerifyHash(string existingHash, string attemptedPassword)
         {
-            return Crypter.SafeEquals(existingHash, HashPassword(attemptedPassword, existingHash));
+            return Crypter.SafeEquals(existingHash.ToString(), HashPassword(attemptedPassword, existingHash));
         }
     }
 }

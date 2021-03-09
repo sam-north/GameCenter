@@ -37,7 +37,7 @@ namespace Core.Mappers.Concretes
             return targets;
         }
 
-        private GameInstanceUserDto Map(GameInstanceUser gameInstanceUser)
+        public GameInstanceUserDto Map(GameInstanceUser gameInstanceUser)
         {
             var target = new GameInstanceUserDto();
             target.UserId = gameInstanceUser.UserId;
@@ -74,6 +74,25 @@ namespace Core.Mappers.Concretes
         {
             var target = new GameInstanceState();
             target.DataAsJson = gameInstanceStateDto.DataAsJson;
+            return target;
+        }
+
+        public ICollection<UserGameInstanceStatelessDto> Map(ICollection<GameInstance> gameInstances)
+        {
+            var results = new List<UserGameInstanceStatelessDto>();
+            foreach (var gameInstance in gameInstances)
+                results.Add(MapUserGameInstanceListDto(gameInstance));
+            return results;
+        }
+
+        public UserGameInstanceStatelessDto MapUserGameInstanceListDto(GameInstance source)
+        {
+            var target = new UserGameInstanceStatelessDto();
+            target.DateCreated = source.DateCreated;
+            target.GameDisplayName = source.Game.DisplayName;
+            target.GameId = source.GameId;
+            target.Id = source.Id;
+            target.Users = Map(source.Users);
             return target;
         }
     }

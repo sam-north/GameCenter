@@ -30,5 +30,10 @@ namespace Core.Validators.Concretes
                 response.Errors.Add("That email address is invalid.");
             return response;
         }
+
+        public Response<string> Validate(PlayGameInstanceDto dto)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

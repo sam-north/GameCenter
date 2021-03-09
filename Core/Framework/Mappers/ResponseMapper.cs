@@ -4,7 +4,7 @@ namespace Core.Framework.Mappers
 {
     public static class ResponseMapper
     {
-        public static Response<Target> Map<Source, Target>(Response<Source> source) where Source : class where Target : class
+        public static IResponse<Target> MapMetadata<Target>(IResponseMetadata source) where Target : class
         {
             var target = new Response<Target>();
             target.Errors = source.Errors;
