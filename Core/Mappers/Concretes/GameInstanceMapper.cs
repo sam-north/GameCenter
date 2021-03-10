@@ -1,12 +1,20 @@
-﻿using Core.Mappers.Interfaces;
+﻿using Core.Framework.Models;
+using Core.Mappers.Interfaces;
 using Core.Models;
 using Core.Models.Dtos;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Mappers.Concretes
 {
     public class GameInstanceMapper : IGameInstanceMapper
     {
+        IRequestContext RequestContext { get; }
+
+        public GameInstanceMapper(IRequestContext requestContext)
+        {
+            RequestContext = requestContext;
+        }
         public GameInstanceDto Map(GameInstance source)
         {
             var target = new GameInstanceDto();
@@ -93,6 +101,7 @@ namespace Core.Mappers.Concretes
             target.GameId = source.GameId;
             target.Id = source.Id;
             target.Users = Map(source.Users);
+            target.Users = target.Users.Where(x => x.UserId != RequestContext.UserId).ToList();
             return target;
         }
     }

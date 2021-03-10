@@ -1,15 +1,17 @@
 ﻿using Core.Logic.Interfaces;
 using Core.Models.Constants;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Core.Logic.Concretes
 {
     public class GameStrategyProvider : IGameStrategyProvider
     {
-        public IMancalaGameLogic MancalaGameLogic { get; }
-        public GameStrategyProvider(IMancalaGameLogic mancalaGameLogic)
+        public IServiceProvider ServiceProvider { get; }
+
+        public GameStrategyProvider(IServiceProvider serviceProvider)
         {
-            MancalaGameLogic = mancalaGameLogic;
+            ServiceProvider = serviceProvider;
         }
 
         public IGameStrategy Provide(int gameId)
@@ -17,7 +19,13 @@ namespace Core.Logic.Concretes
             switch (gameId)
             {
                 case (int)Games.Mancala:
-                    return MancalaGameLogic;
+                    return ServiceProvider.GetService<IMancalaGameLogic>();
+                case (int)Games.Checkers:
+                    return ServiceProvider.GetService<ICheckersGameLogic>();
+                case (int)Games.ConnectFour:
+                    return ServiceProvider.GetService<IConnectFourGameLogic>();
+                case (int)Games.TicTacToe:
+                    return ServiceProvider.GetService<ITicTacToeGameLogic>();
                 default:
                     throw new NotImplementedException();
             }

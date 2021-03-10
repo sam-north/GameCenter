@@ -1,23 +1,38 @@
-<h3 class="alert alert-success">This is the user dashboard after they sign in</h3>
-<p>We can put active games, game history, etc here.</p>
-
 <h3>Your Active Games</h3>
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="userGames.length">
     <thead>
-      <tr>
-        <th></th>
-        <th>Game</th>
-        <th>Started On</th>
-      </tr>
+        <tr>
+            <th></th>
+            <th>Game</th>
+            <th>Versus</th>
+            <th>Started On</th>
+        </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let userGame of userGames">
-        <td>
-            <button class="btn btn-sm btn-light mr-3" (click)="play(userGame)"><i class="fas fa-play"></i></button>
-            <!-- <button class="btn btn-sm btn-danger" (click)="delete(userGame)"><i class="fas fa-trash"></i></button> -->
-        </td>
-        <td>{{ userGame.gameDisplayName }}</td>
-        <td>{{ userGame.dateCreated | date:'medium' }}</td>
-      </tr>
+        <tr *ngFor="let userGame of userGames">
+            <td>
+                <button class="btn btn-sm btn-primary" (click)="play(userGame)"><i class="fas fa-play"></i></button>
+                <!-- <button class="btn btn-sm btn-danger" (click)="delete(userGame)"><i class="fas fa-trash"></i></button> -->
+            </td>
+            <td>{{ userGame.gameDisplayName }}</td>
+            <td>
+                <div *ngFor="let gameInstanceUserDto of userGame.users">{{gameInstanceUserDto.userEmail}}</div>
+            </td>
+            <td>{{ userGame.dateCreated | date:'medium' }}</td>
+        </tr>
     </tbody>
-  </table>
+</table>
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="!userGames.length">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>You have no active games. Start a <button class="btn btn-success btn-sm"
+                    [routerLink]="['/new-game']">New game <i class="fas fa-plus"></i></button>
+            </td>
+        </tr>
+    </tbody>
+</table>

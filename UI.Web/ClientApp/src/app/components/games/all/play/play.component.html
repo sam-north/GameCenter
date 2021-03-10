@@ -1,7 +1,9 @@
-<p>You are playing {{model.gameDisplayName}}</p>
-
+<h3>{{model.gameDisplayName}}</h3>
 <p>Created on {{model.dateCreated | date:'medium'}}</p>
-<label for="">Players</label>
+<h4>Players</h4>
 <ul>
     <li *ngFor="let user of model.users">{{user.userEmail}}</li>
 </ul>
+
+<h4>State</h4>
+<p>{{model.state.dataAsJson}}</p>
