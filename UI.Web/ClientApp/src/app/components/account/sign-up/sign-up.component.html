@@ -1,14 +1,20 @@
-<div>
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email" [(ngModel)]="signUpModel.email">
-</div>
-<div>
-    <label for="pass">Password (8 characters minimum):</label>
-    <input type="password" id="pass" name="password" [(ngModel)]="signUpModel.password" minlength="8" required>
-</div>
-<div>
-    <label for="confirm-password">Confirm Password:</label>
-    <input type="password" id="confirm-password" name="confirm-password" [(ngModel)]="signUpModel.confirmPassword" minlength="8" required>
+<div id="container" class="rounded">
+    <h3>Sign Up</h3>
+    <form>
+        <div>
+            <!-- <label for="email">Email:</label> -->
+            <input type="text" id="email" class="form-control" name="email" placeholder="Email" [(ngModel)]="signUpModel.email">
+        </div>
+        <div>
+            <!-- <label for="pass">Password (8 characters minimum):</label> -->
+            <input type="password" id="pass" class="form-control" name="password" placeholder="Password" [(ngModel)]="signUpModel.password" minlength="8" required>
+        </div>
+        <div>
+            <!-- <label for="confirm-password">Confirm Password:</label> -->
+            <input type="password" id="confirm-password" class="form-control" name="confirm-password" placeholder="Confirm Password"
+                [(ngModel)]="signUpModel.confirmPassword" minlength="8" required>
+        </div>
+        <input type="submit" class="btn btn-primary" (click)="submitUser()" value="Sign in">
+    </form>
 </div>
 
-<input type="submit" (click)="submitUser()" value="Sign in">
