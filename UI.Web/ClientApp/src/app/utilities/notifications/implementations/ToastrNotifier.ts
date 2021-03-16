@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 
 @Injectable()
 export class ToastrNotifier extends Notifier {
-    defaultPositionClass: string = "toast-bottom-right";
+    defaultPositionClass: string = "toast-bottom-center";
     progressBarSetting: any = { progressBar: true };
     successDefaultOptions: any = { timeOut: 5000, positionClass: this.defaultPositionClass };
     dangerDefaultOptions: any = { timeOut: 0, extendedTimeOut: 0, closeButton: true, positionClass: this.defaultPositionClass };

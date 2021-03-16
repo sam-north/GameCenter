@@ -1,15 +1,15 @@
 
 <h2></h2>
 <form>
-    <label>Game</label>
-    <select class="form-control" name="game" [(ngModel)]="selectedGame">
+    <label>Select a game</label>
+    <select class="form-control" name="game" placeholder= "Click Me" [(ngModel)]="selectedGame">
         <option *ngFor="let game of games" [ngValue]="game">{{game.displayName}}</option>
     </select>
 
     <div>
-        <label>Email</label>
+        <label>Enter an email to challenge someone.</label>
         <input type="text" name="email" autofocus id="email" class="form-control" placeholder="Email" [(ngModel)]="opponentEmail">
     </div>
-    <input type="submit" class="btn btn-primary" (click)="submit()" value="GLHF">
+    <input id = "GLHF" type="submit" class="btn btn-primary" (click)="submit()" value="GLHF">
 </form>
 
