@@ -5,7 +5,7 @@ namespace Core.Validators.Interfaces
 {
     public interface IGameInstanceValidator
     {
-        Response<string> Validate(CreateGameInstanceDto dto);
-        Response<string> Validate(PlayGameInstanceDto dto);
+        IResponse<string> Validate(CreateGameInstanceDto dto);
+        IResponse<string> Validate(PlayGameInstanceDto dto);
     }
 }

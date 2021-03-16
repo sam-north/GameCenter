@@ -1,4 +1,5 @@
 ﻿using Core.DataAccess;
+using Core.Framework.Mappers;
 using Core.Framework.Models;
 using Core.Logic.Interfaces;
 using Core.Models;
@@ -75,11 +76,22 @@ namespace Core.Logic.Concretes
                 ModelContext.SaveChanges();
             }
 
-            SaveState(entity.GameId, entity.Id, modelToSave);
+            SaveState(entity.Id, modelToSave.State);
             SaveUsers(entity.Id, modelToSave.Users);
 
             ModelContext.SaveChanges();
             return entity;
+        }
+
+        private void SaveState(Guid gameInstanceId, GameInstanceState state)
+        {
+            var entity = new GameInstanceState();
+
+            entity.DateCreated = DateTimeOffset.Now;
+            entity.DataAsJson = state.DataAsJson;
+            entity.GameInstanceId = gameInstanceId;
+
+            ModelContext.GameInstanceStates.Add(entity);
         }
 
         public void Delete(Guid id)
@@ -140,25 +152,25 @@ namespace Core.Logic.Concretes
             }
         }
 
-        private void SaveState(int gameId, Guid gameInstanceId, GameInstance modelToSave)
+        private GameInstanceState CreateGameStateObject(string stateDataAsJson)
         {
             var entity = new GameInstanceState();
 
-            entity.DateCreated = DateTimeOffset.Now;
-            entity.GameInstanceId = gameInstanceId;
-
-            var gameStrategy = GameStrategyProvider.Provide(gameId);
-            entity.DataAsJson = !string.IsNullOrWhiteSpace(modelToSave.State?.DataAsJson) ? modelToSave.State.DataAsJson : gameStrategy.GetDefaultGameState(modelToSave);
-
-            ModelContext.GameInstanceStates.Add(entity);
+            entity.DataAsJson = stateDataAsJson;
+            return entity;
         }
 
-        public Response<GameInstance> New(CreateGameInstanceDto dto)
+        public IResponse<GameInstance> New(CreateGameInstanceDto dto)
         {
             var response = new Response<GameInstance>();
             var gameInstance = new GameInstance();
             gameInstance.GameId = dto.GameId;
 
+            //add state
+            var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
+            gameInstance.State = CreateGameStateObject(gameStrategy.GetDefaultGameState(gameInstance));
+
+            //add users
             gameInstance.Users.Add(new GameInstanceUser
             {
                 UserId = RequestContext.UserId,
@@ -170,23 +182,26 @@ namespace Core.Logic.Concretes
                 UserId = opposingUser.Id,
                 Role = GameInstanceRoles.Player.ToString()
             });
+
             response.Data = Save(gameInstance);
             return response;
         }
 
-        public Response<GameInstance> Play(PlayGameInstanceDto dto)
+        public IResponse<GameInstance> Play(PlayGameInstanceDto dto)
         {
-            var response = new Response<GameInstance>();
             var gameInstance = Get(dto.Id);
             var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
 
-            throw new NotImplementedException();
-            //feedback messages in LoadAndPlay isn't used.  Needs to be errors or messages.
+            var newGameStateAsJsonStringResponse = gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput);
+            var response = ResponseMapper.MapMetadata<GameInstance>(newGameStateAsJsonStringResponse);
 
-            //var newGameStateAsJsonStringResponse = gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput);
+            if (!response.IsValid)
+                return response;
 
-            //SaveState(gameInstance.GameId, )
-            //response.Data = Save(gameInstance);
+            var newGameState = CreateGameStateObject(newGameStateAsJsonStringResponse.Data);
+            gameInstance.State = newGameState;
+
+            response.Data = Save(gameInstance);
             return response;
         }
     }

@@ -30,7 +30,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Response<object>> SignUp(UserSignUpDto dto)
+        public ActionResult<IResponse<object>> SignUp(UserSignUpDto dto)
         {
             var validationResponse = UserValidator.Validate(dto);
             if (!validationResponse.IsValid)
@@ -43,7 +43,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<object>>> SignInAsync(UserSignInDto dto)
+        public async Task<ActionResult<IResponse<object>>> SignInAsync(UserSignInDto dto)
         {
             var validationResponse = UserValidator.Validate(dto);
             if (!validationResponse.IsValid)
@@ -88,7 +88,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Response<object>>> SignOutAsync()
+        public async Task<ActionResult<IResponse<object>>> SignOutAsync()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 

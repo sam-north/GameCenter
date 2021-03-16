@@ -6,6 +6,6 @@ namespace Core.Logic.Interfaces
     public interface IGameStrategy
     {
         string GetDefaultGameState(GameInstance gameInstance);
-        Response<string> LoadAndPlayAndReturnGameStateAsString(GameInstance previousGameInstance, int userId, string userInput);
+        IResponse<string> LoadAndPlayAndReturnGameStateAsString(GameInstance gameInstanceWithPreviousState, int userId, string userInput);
     }
 }

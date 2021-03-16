@@ -7,6 +7,6 @@ namespace Core.Logic.Interfaces
     {
         User Get(string email);
         User Create(User model);
-        Response<User> SignIn(User model);
+        IResponse<User> SignIn(User model);
     }
 }

@@ -26,7 +26,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Response<object>> New(CreateGameInstanceDto dto)
+        public ActionResult<IResponse<object>> New(CreateGameInstanceDto dto)
         {
             var validationResponse = GameInstanceValidator.Validate(dto);
             if (!validationResponse.IsValid) return BadRequest(validationResponse);
@@ -39,7 +39,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Response<object>> Get()
+        public ActionResult<IResponse<object>> Get()
         {
             var gameInstances = GameInstanceLogic.GetCurrentUserGameInstancesWithoutGameStates();
             if (gameInstances == null) return new EmptyResult();
@@ -51,7 +51,7 @@ namespace UI.Web.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public ActionResult<Response<object>> Get(Guid id)
+        public ActionResult<IResponse<object>> Get(Guid id)
         {
             var gameInstance = GameInstanceLogic.Get(id);
             if (gameInstance == null) return NotFound(gameInstance);
@@ -62,7 +62,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Response<object>> Play(PlayGameInstanceDto dto)
+        public ActionResult<IResponse<object>> Play(PlayGameInstanceDto dto)
         {
             var validationResponse = GameInstanceValidator.Validate(dto);
             if (!validationResponse.IsValid) return BadRequest(validationResponse);

@@ -7,7 +7,7 @@ namespace Core.Validators.Concretes
 {
     public class UserValidator : IUserValidator
     {
-        public Response<string> Validate(UserSignUpDto dto)
+        public IResponse<string> Validate(UserSignUpDto dto)
         {
             var response = new Response<string>();
 
@@ -26,7 +26,7 @@ namespace Core.Validators.Concretes
 
             return response;
         }
-        public Response<string> Validate(UserSignInDto dto)
+        public IResponse<string> Validate(UserSignInDto dto)
         {
             var response = new Response<string>();
 

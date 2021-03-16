@@ -19,7 +19,7 @@ namespace Core.Validators.Concretes
             RequestContext = requestContext;
         }
 
-        public Response<string> Validate(CreateGameInstanceDto dto)
+        public IResponse<string> Validate(CreateGameInstanceDto dto)
         {
             var response = new Response<string>();
 
@@ -31,7 +31,7 @@ namespace Core.Validators.Concretes
             return response;
         }
 
-        public Response<string> Validate(PlayGameInstanceDto dto)
+        public IResponse<string> Validate(PlayGameInstanceDto dto)
         {
             throw new System.NotImplementedException();
         }

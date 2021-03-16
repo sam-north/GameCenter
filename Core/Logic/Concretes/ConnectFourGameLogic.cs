@@ -11,7 +11,7 @@ namespace Core.Logic.Concretes
             return "DEFAULT CONNECT FOUR GAME STATE";
         }
 
-        public Response<string> LoadAndPlayAndReturnGameStateAsString(GameInstance previousGameInstance, int userId, string userInput)
+        public IResponse<string> LoadAndPlayAndReturnGameStateAsString(GameInstance gameInstanceWithPreviousState, int userId, string userInput)
         {
             var response = new Response<string>();
 

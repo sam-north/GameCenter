@@ -13,7 +13,7 @@ namespace Core.Logic.Interfaces
         GameInstance Get(Guid id);
         GameInstance Save(GameInstance modelToSave);
         void Delete(Guid id);
-        Response<GameInstance> New(CreateGameInstanceDto dto);
-        Response<GameInstance> Play(PlayGameInstanceDto dto);
+        IResponse<GameInstance> New(CreateGameInstanceDto dto);
+        IResponse<GameInstance> Play(PlayGameInstanceDto dto);
     }
 }

@@ -5,7 +5,7 @@ namespace Core.Validators.Interfaces
 {
     public interface IUserValidator
     {
-        Response<string> Validate(UserSignUpDto dto);
-        Response<string> Validate(UserSignInDto dto);
+        IResponse<string> Validate(UserSignUpDto dto);
+        IResponse<string> Validate(UserSignInDto dto);
     }
 }

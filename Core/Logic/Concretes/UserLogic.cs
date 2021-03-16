@@ -32,7 +32,7 @@ namespace Core.Logic.Concretes
             return ModelContext.Users.SingleOrDefault(x => x.Email == email);
         }
 
-        public Response<User> SignIn(User model)
+        public IResponse<User> SignIn(User model)
         {
             var response = new Response<User>();
             var dbUser = Get(model.Email);
