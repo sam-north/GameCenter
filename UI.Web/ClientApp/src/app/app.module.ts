@@ -10,7 +10,7 @@ import { CounterComponent } from './components/examples/counter/counter.componen
 import { FetchDataComponent } from './components/examples/fetch-data/fetch-data.component';
 import { CrudExampleComponent } from './components/examples/crud-examples/crud-example/crud-example.component';
 import { CrudExamplesComponent } from './components/examples/crud-examples/crud-examples.component';
-import { BoardComponent } from './components/games/tic-tac-toe/board/board.component';
+import { PlayTicTacToeComponent } from './components/games/tic-tac-toe/play-tic-tac-toe/play-tic-tac-toe.component';
 import { SquareComponent } from './components/games/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
 import { SignUpComponent } from './components/account/sign-up/sign-up.component';
@@ -29,6 +29,9 @@ import { NewGameComponent } from './components/games/all/new-game/new-game.compo
 import { PlayComponent } from './components/games/all/play/play.component';
 import { CheckersAboutComponent } from './components/games/checkers/checkers-about/checkers-about.component';
 import { ConnectFourComponent } from './components/games/connect-four/connect-four/connect-four.component';
+import { PlayCheckersComponent } from './components/games/checkers/play-checkers/play-checkers.component';
+import { PlayConnectFourComponent } from './components/games/connect-four/play-connect-four/play-connect-four.component';
+import { PlayMancalaComponent } from './components/games/mancala/play-mancala/play-mancala.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -49,7 +52,7 @@ const authenticatedRoutes: Routes = [
       { path: 'play/:id', component: PlayComponent },
       { path: 'crud-examples', component: CrudExamplesComponent },
       { path: 'crud-example/:id', component: CrudExampleComponent },
-      { path: 'tic-tac-toe', component: BoardComponent },
+      { path: 'tic-tac-toe', component: PlayTicTacToeComponent },
       { path: '**', component: HomeComponent },
     ]
   }
@@ -65,7 +68,7 @@ const authenticatedRoutes: Routes = [
     CrudExampleComponent,
     CrudExamplesComponent,
     SquareComponent,
-    BoardComponent,
+    PlayTicTacToeComponent,
     SignUpComponent,
     SignInComponent,
     DashboardComponent,
@@ -74,7 +77,10 @@ const authenticatedRoutes: Routes = [
     NewGameComponent,
     PlayComponent,
     CheckersAboutComponent,
-    ConnectFourComponent
+    ConnectFourComponent,
+    PlayCheckersComponent,
+    PlayConnectFourComponent,
+    PlayMancalaComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

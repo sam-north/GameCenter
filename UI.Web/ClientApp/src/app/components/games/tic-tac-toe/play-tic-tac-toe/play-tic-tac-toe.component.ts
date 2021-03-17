@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'board',
-    templateUrl: './board.component.html',
+    selector: 'app-play-tic-tac-toe',
+    templateUrl: './play-tic-tac-toe.component.html',
     styles: [
         `main {display: grid;
     grid-template-columns: 200px 200px 200px;}`
     ]
 })
 
-export class BoardComponent implements OnInit {
+export class PlayTicTacToeComponent implements OnInit {
     squares: any[];
     xIsNext: boolean;
     winner: string;

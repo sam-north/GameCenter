@@ -76,8 +76,8 @@ namespace Core.Logic.Concretes
                 ModelContext.SaveChanges();
             }
 
-            SaveState(entity.Id, modelToSave.State);
             SaveUsers(entity.Id, modelToSave.Users);
+            SaveState(entity.Id, modelToSave.State);
 
             ModelContext.SaveChanges();
             return entity;
@@ -166,10 +166,6 @@ namespace Core.Logic.Concretes
             var gameInstance = new GameInstance();
             gameInstance.GameId = dto.GameId;
 
-            //add state
-            var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
-            gameInstance.State = CreateGameStateObject(gameStrategy.GetDefaultGameState(gameInstance));
-
             //add users
             gameInstance.Users.Add(new GameInstanceUser
             {
@@ -182,6 +178,10 @@ namespace Core.Logic.Concretes
                 UserId = opposingUser.Id,
                 Role = GameInstanceRoles.Player.ToString()
             });
+
+            //add state
+            var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
+            gameInstance.State = CreateGameStateObject(gameStrategy.GetDefaultGameState(gameInstance));
 
             response.Data = Save(gameInstance);
             return response;

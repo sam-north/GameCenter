@@ -7,3 +7,7 @@
 
 <h4>State</h4>
 <p>{{model.state.dataAsJson}}</p>
+<app-play-checkers *ngIf="model.gameId === 3"></app-play-checkers>
+<app-play-connect-four *ngIf="model.gameId === 2"></app-play-connect-four>
+<app-play-mancala *ngIf="model.gameId === 1"></app-play-mancala>
+<app-play-tic-tac-toe *ngIf="model.gameId === 4"></app-play-tic-tac-toe>
