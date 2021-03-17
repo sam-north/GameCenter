@@ -34,28 +34,19 @@ namespace Core.Logic.Concretes
 
             LoadGame(gameInstanceWithPreviousState);
             Play(userId, userInput);
+            _response.Data = CreateGameStateAsString();
             return _response;
         }
 
         private void Play(int userId, string userInput)
         {
-            if (_gameState == null || (_gameState != null && !_gameState.HasGameBeenSetup))
-                SetupGame();
-            if (_gameState.GameIsPlayable)
-            {
-                CheckGameState(userId, userInput);
-                CreateGameStateAsString();
-            }
+            CheckGameState(userId, userInput);
         }
 
         private void LoadGame(GameInstance gameInstanceWithPreviousState)
         {
             if (gameInstanceWithPreviousState != null)
-            {
                 _gameState = JsonSerializer.Deserialize<MancalaGameState>(gameInstanceWithPreviousState.State.DataAsJson);
-                if (_gameState.HasGameBeenSetup && !_gameState.GameIsPlayable)
-                    _gameState = null;
-            }
         }
 
         private string CreateGameStateAsString()
@@ -74,12 +65,14 @@ namespace Core.Logic.Concretes
         {
             var winner = (_gameState.Player1.Board[6] > _gameState.Player2.Board[6]) ? _gameState.Player1 : (_gameState.Player2.Board[6] > _gameState.Player1.Board[6]) ? _gameState.Player2 : null;
 
-            if (winner != null)
+            if (winner == null)
             {
-
+                _response.Messages.Add("It's a tie! Nobody wins!");
+                return;
             }
-            _response.Messages.Add(winner + " wins!");
-            _response.Messages.Add($"{_gameState.Player1.User} had {_gameState.Player1.Board[6]} and {_gameState.Player2.User} had {_gameState.Player2.Board[6]}");
+
+            _response.Messages.Add(winner.User?.UserEmail + " wins!");
+            _response.Messages.Add($"{_gameState.Player1.User?.UserEmail} had {_gameState.Player1.Board[6]} and {_gameState.Player2.User?.UserEmail} had {_gameState.Player2.Board[6]}");
         }
 
         private void SetupGame()
@@ -109,7 +102,7 @@ namespace Core.Logic.Concretes
             _gameState.GameIsPlayable = CheckForEndOfGame();
             if (!_gameState.GameIsPlayable) return;
 
-            if (userId == 0 || UserIsInvalidUser(userId) || string.IsNullOrWhiteSpace(input))
+            if (userId == 0 || UserIsInvalidUser(userId))
             {
                 _response.Errors.Add("Invalid user");
                 return;

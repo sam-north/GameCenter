@@ -195,7 +195,7 @@ namespace Core.Logic.Concretes
             var newGameStateAsJsonStringResponse = gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput);
             var response = ResponseMapper.MapMetadata<GameInstance>(newGameStateAsJsonStringResponse);
 
-            if (!response.IsValid)
+            if (!response.IsValid || response.Messages.Any(x => x.Contains("wins!")))
                 return response;
 
             var newGameState = CreateGameStateObject(newGameStateAsJsonStringResponse.Data);
