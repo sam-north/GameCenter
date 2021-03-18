@@ -1,4 +1,6 @@
-﻿namespace Core.Logic.Interfaces
+﻿using Core.Logic.Interfaces;
+
+namespace Core.Providers.Interfaces
 {
     public interface IGameStrategyProvider
     {

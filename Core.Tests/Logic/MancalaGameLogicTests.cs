@@ -24,33 +24,37 @@ namespace Core.Tests.Logic
             var gameInstanceMapper = A.Fake<IGameInstanceMapper>();
             _mancalaGameLogic = new MancalaGameLogic(gameInstanceMapper);
 
-            _gameInstance = new GameInstance();
-            _gameInstance.Id = Guid.NewGuid();
-            _gameInstance.GameId = (int)Games.Mancala;
-            _gameInstance.DateCreated = DateTimeOffset.Now;
-            _gameInstance.IsDeleted = false;
+            _gameInstance = new GameInstance
+            {
+                Id = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
+                GameId = (int)Games.Mancala,
+                DateCreated = Convert.ToDateTime("12-11-2012 12:12:12AM"),
+                IsDeleted = false
+            };
 
-            var gameInstanceUsers = new List<GameInstanceUser>();
-            gameInstanceUsers.Add(new GameInstanceUser
+            var gameInstanceUsers = new List<GameInstanceUser>
             {
-                UserId = 398,
-                Role = GameInstanceRoles.Player.ToString()
-            });
-            gameInstanceUsers.Add(new GameInstanceUser
-            {
-                UserId = 66246,
-                Role = GameInstanceRoles.Player.ToString()
-            });
-            gameInstanceUsers.Add(new GameInstanceUser
-            {
-                UserId = 6363,
-                Role = GameInstanceRoles.Spectator.ToString()
-            });
-            gameInstanceUsers.Add(new GameInstanceUser
-            {
-                UserId = 3785633,
-                Role = GameInstanceRoles.Spectator.ToString()
-            });
+                new GameInstanceUser
+                {
+                    UserId = 398,
+                    Role = GameInstanceRoles.Player.ToString()
+                },
+                new GameInstanceUser
+                {
+                    UserId = 66246,
+                    Role = GameInstanceRoles.Player.ToString()
+                },
+                new GameInstanceUser
+                {
+                    UserId = 6363,
+                    Role = GameInstanceRoles.Spectator.ToString()
+                },
+                new GameInstanceUser
+                {
+                    UserId = 3785633,
+                    Role = GameInstanceRoles.Spectator.ToString()
+                }
+            };
 
             _gameInstance.State = new GameInstanceState
             {

@@ -7,7 +7,7 @@ namespace Core.Mappers.Concretes
 {
     public class GameMapper : IGameMapper
     {
-        public GameDto Map(Game source)
+        private GameDto Map(Game source)
         {
             var target = new GameDto();
             target.DisplayName = source.DisplayName;

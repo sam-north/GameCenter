@@ -15,6 +15,7 @@ namespace Core.Mappers.Concretes
         {
             RequestContext = requestContext;
         }
+
         public GameInstanceDto Map(GameInstance source)
         {
             var target = new GameInstanceDto();
@@ -37,20 +38,32 @@ namespace Core.Mappers.Concretes
             return target;
         }
 
-        private ICollection<GameInstanceUserDto> Map(ICollection<GameInstanceUser> gameInstanceUsers)
-        {
-            var targets = new List<GameInstanceUserDto>();
-            foreach (var gameInstanceUser in gameInstanceUsers)
-                targets.Add(Map(gameInstanceUser));
-            return targets;
-        }
-
         public GameInstanceUserDto Map(GameInstanceUser gameInstanceUser)
         {
             var target = new GameInstanceUserDto();
             target.UserId = gameInstanceUser.UserId;
             target.Role = gameInstanceUser.Role;
             target.UserEmail = gameInstanceUser.User?.Email;
+            return target;
+        }
+
+        public ICollection<UserGameInstanceStatelessDto> Map(ICollection<GameInstance> gameInstances)
+        {
+            var results = new List<UserGameInstanceStatelessDto>();
+            foreach (var gameInstance in gameInstances)
+                results.Add(MapUserGameInstanceListDto(gameInstance));
+            return results;
+        }
+
+        public UserGameInstanceStatelessDto MapUserGameInstanceListDto(GameInstance source)
+        {
+            var target = new UserGameInstanceStatelessDto();
+            target.DateCreated = source.DateCreated;
+            target.GameDisplayName = source.Game.DisplayName;
+            target.GameId = source.GameId;
+            target.Id = source.Id;
+            target.Users = Map(source.Users);
+            target.Users = target.Users.Where(x => x.UserId != RequestContext.UserId).ToList();
             return target;
         }
 
@@ -85,24 +98,12 @@ namespace Core.Mappers.Concretes
             return target;
         }
 
-        public ICollection<UserGameInstanceStatelessDto> Map(ICollection<GameInstance> gameInstances)
+        private ICollection<GameInstanceUserDto> Map(ICollection<GameInstanceUser> gameInstanceUsers)
         {
-            var results = new List<UserGameInstanceStatelessDto>();
-            foreach (var gameInstance in gameInstances)
-                results.Add(MapUserGameInstanceListDto(gameInstance));
-            return results;
-        }
-
-        public UserGameInstanceStatelessDto MapUserGameInstanceListDto(GameInstance source)
-        {
-            var target = new UserGameInstanceStatelessDto();
-            target.DateCreated = source.DateCreated;
-            target.GameDisplayName = source.Game.DisplayName;
-            target.GameId = source.GameId;
-            target.Id = source.Id;
-            target.Users = Map(source.Users);
-            target.Users = target.Users.Where(x => x.UserId != RequestContext.UserId).ToList();
-            return target;
+            var targets = new List<GameInstanceUserDto>();
+            foreach (var gameInstanceUser in gameInstanceUsers)
+                targets.Add(Map(gameInstanceUser));
+            return targets;
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using Core.Logic.Interfaces;
 using Core.Models.Constants;
+using Core.Providers.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Core.Logic.Concretes
+namespace Core.Providers.Concretes
 {
     public class GameStrategyProvider : IGameStrategyProvider
     {
