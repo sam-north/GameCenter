@@ -168,16 +168,19 @@ namespace Core.Logic.Concretes
             gameInstance.GameId = dto.GameId;
 
             //add users
+            var user = UserLogic.Get(RequestContext.Email);
             gameInstance.Users.Add(new GameInstanceUser
             {
                 UserId = RequestContext.UserId,
-                Role = GameInstanceRoles.Player.ToString()
-            });
+                Role = GameInstanceRoles.Player.ToString(),
+                User = user
+            }) ;
             var opposingUser = UserLogic.Get(dto.OpponentEmail);
             gameInstance.Users.Add(new GameInstanceUser
             {
                 UserId = opposingUser.Id,
-                Role = GameInstanceRoles.Player.ToString()
+                Role = GameInstanceRoles.Player.ToString(),
+                User = opposingUser
             });
 
             //add state
