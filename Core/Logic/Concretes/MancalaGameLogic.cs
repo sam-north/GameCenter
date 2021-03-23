@@ -46,12 +46,22 @@ namespace Core.Logic.Concretes
         private void LoadGame(GameInstance gameInstanceWithPreviousState)
         {
             if (gameInstanceWithPreviousState != null)
-                _gameState = JsonSerializer.Deserialize<MancalaGameState>(gameInstanceWithPreviousState.State.DataAsJson);
+            {
+                var serializeOptions = new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                _gameState = JsonSerializer.Deserialize<MancalaGameState>(gameInstanceWithPreviousState.State.DataAsJson, serializeOptions);
+            }
         }
 
         private string CreateGameStateAsString()
         {
-            string jsonString = JsonSerializer.Serialize(_gameState);
+            var serializeOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+            string jsonString = JsonSerializer.Serialize(_gameState, serializeOptions);
             return jsonString;
         }
 

@@ -11,7 +11,6 @@ import { FetchDataComponent } from './components/examples/fetch-data/fetch-data.
 import { CrudExampleComponent } from './components/examples/crud-examples/crud-example/crud-example.component';
 import { CrudExamplesComponent } from './components/examples/crud-examples/crud-examples.component';
 import { PlayTicTacToeComponent } from './components/games/tic-tac-toe/play-tic-tac-toe/play-tic-tac-toe.component';
-import { SquareComponent } from './components/games/tic-tac-toe/square/square.component';
 import { ApiService } from './services/api.service';
 import { SignUpComponent } from './components/account/sign-up/sign-up.component';
 import { SignInComponent } from './components/account/sign-in/sign-in.component';
@@ -32,6 +31,7 @@ import { ConnectFourComponent } from './components/games/connect-four/connect-fo
 import { PlayCheckersComponent } from './components/games/checkers/play-checkers/play-checkers.component';
 import { PlayConnectFourComponent } from './components/games/connect-four/play-connect-four/play-connect-four.component';
 import { PlayMancalaComponent } from './components/games/mancala/play-mancala/play-mancala.component';
+import { SquareComponent } from './components/games/tic-tac-toe/play-tic-tac-toe/square/square.component';
 
 const anonymousRoutes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },

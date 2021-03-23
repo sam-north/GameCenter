@@ -1,5 +1,6 @@
 ﻿using Core.Framework.Models;
 using Core.Logic.Interfaces;
+using Core.Models.Constants;
 using Core.Models.Dtos;
 using Core.Validators.Interfaces;
 using System.Linq;
@@ -11,12 +12,14 @@ namespace Core.Validators.Concretes
         public IGameLogic GameLogic { get; }
         public IUserLogic UserLogic { get; }
         public IRequestContext RequestContext { get; }
+        public IGameInstanceLogic GameInstanceLogic { get; }
 
-        public GameInstanceValidator(IGameLogic gameLogic, IUserLogic userLogic, IRequestContext requestContext)
+        public GameInstanceValidator(IGameLogic gameLogic, IUserLogic userLogic, IRequestContext requestContext, IGameInstanceLogic gameInstanceLogic)
         {
             GameLogic = gameLogic;
             UserLogic = userLogic;
             RequestContext = requestContext;
+            GameInstanceLogic = gameInstanceLogic;
         }
 
         public IResponse<string> Validate(CreateGameInstanceDto dto)
@@ -33,7 +36,14 @@ namespace Core.Validators.Concretes
 
         public IResponse<string> Validate(PlayGameInstanceDto dto)
         {
-            throw new System.NotImplementedException();
+            var response = new Response<string>();
+
+            var gameInstance = GameInstanceLogic.Get(dto.Id);
+            if (gameInstance == null || !gameInstance.Users.Any(x => x.Role == GameInstanceRoles.Player.ToString() && x.UserId == RequestContext.UserId))
+                response.Errors.Add("That game is invalid.");
+            if (string.IsNullOrWhiteSpace(dto.UserInput))
+                response.Errors.Add("User input is invalid.");
+            return response;
         }
     }
 }

@@ -4,19 +4,20 @@ import { CRUDExample } from '../models/CRUDExample';
 import { SignIn } from '../models/SignIn';
 import { SignUp } from '../models/SignUp';
 import { throwError } from 'rxjs';
-import { Response} from '../models/Response';
+import { Response } from '../models/Response';
 import { GameDto } from '../models/GameDto';
 import { CreateGameInstanceDto } from '../models/CreateGameInstanceDto';
 import { GameInstanceDto } from '../models/GameInstanceDto';
 import { UserGameInstanceStatelessDto } from '../models/UserGameInstanceStatelessDto';
+import { PlayGameInstanceDto } from '../models/PlayGameInstanceDto';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  url:string = window.location.href;
-  arr:string[] = this.url.split("/");
-  rootUrl:string = "https://localhost:44353"
+  url: string = window.location.href;
+  arr: string[] = this.url.split("/");
+  rootUrl: string = "https://localhost:44353"
 
   constructor(private http: HttpClient) { }
 
@@ -27,33 +28,34 @@ export class ApiService {
     return this.http.get<CRUDExample>(`${this.rootUrl}/crudexample/${id}`).toPromise();
   }
   createCrudExample(crudExample: CRUDExample): Promise<CRUDExample> {
-    return this.http.post<CRUDExample>(`${this.rootUrl}/crudexample`, 
-    { text: crudExample.text
-    }
+    return this.http.post<CRUDExample>(`${this.rootUrl}/crudexample`,
+      {
+        text: crudExample.text
+      }
     ).toPromise();
   }
   updateCrudExample(crudExample: CRUDExample): Promise<CRUDExample> {
-    return this.http.put<CRUDExample>(`${this.rootUrl}/crudexample/${crudExample.id}`, 
-    { text: crudExample.text }).toPromise();
+    return this.http.put<CRUDExample>(`${this.rootUrl}/crudexample/${crudExample.id}`,
+      { text: crudExample.text }).toPromise();
   }
   deleteCrudExample(id: number): Promise<void> {
     return this.http.delete<void>(`${this.rootUrl}/crudexample/${id}`).toPromise();
-  }  
+  }
   signUpUser(signUpModel: SignUp): Promise<void> {
-    return this.http.post<void>(`${this.rootUrl}/User/SignUp`, 
-    { 
-      email: signUpModel.email,
-      password: signUpModel.password,
-      confirmPassword: signUpModel.confirmPassword
-    }
+    return this.http.post<void>(`${this.rootUrl}/User/SignUp`,
+      {
+        email: signUpModel.email,
+        password: signUpModel.password,
+        confirmPassword: signUpModel.confirmPassword
+      }
     ).toPromise();
   }
   signInUser(signInModel: SignIn): Promise<void> {
-    return this.http.post<void>(`${this.rootUrl}/User/SignIn`, 
-    { 
-      email: signInModel.email,
-      password: signInModel.password
-    }
+    return this.http.post<void>(`${this.rootUrl}/User/SignIn`,
+      {
+        email: signInModel.email,
+        password: signInModel.password
+      }
     ).toPromise();
   }
   signOutUser(): Promise<void> {
@@ -63,11 +65,27 @@ export class ApiService {
     return this.http.get<GameDto[]>(`${this.rootUrl}/game`).toPromise();
   }
   newGame(dto: CreateGameInstanceDto): Promise<Response<GameInstanceDto>> {
-    return this.http.post<Response<GameInstanceDto>>(`${this.rootUrl}/UserGame/New`, 
-    { 
-      opponentEmail: dto.opponentEmail,
-      gameId: dto.gameId
-    }
+    return this.http.post<Response<GameInstanceDto>>(`${this.rootUrl}/UserGame/New`,
+      {
+        opponentEmail: dto.opponentEmail,
+        gameId: dto.gameId
+      }
+    ).toPromise();
+  }
+  playGame(dto: PlayGameInstanceDto): Promise<Response<GameInstanceDto>> {
+    return this.http.post<Response<GameInstanceDto>>(`${this.rootUrl}/UserGame/Play`,
+      {
+        id: dto.id,
+        userInput: dto.userInput
+      }
+    ).toPromise();
+  }
+  checkGameInstanceForRefresh(id: number, date: Date): Promise<Response<GameInstanceDto>> {
+    return this.http.post<Response<GameInstanceDto>>(`${this.rootUrl}/UserGame/RefreshCheck`,
+      {
+        id: id,
+        date: date
+      }
     ).toPromise();
   }
   getGameInstance(id: string): Promise<Response<GameInstanceDto>> {

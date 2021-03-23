@@ -70,7 +70,22 @@ namespace UI.Web.Controllers
             var gameInstanceResponse = GameInstanceLogic.Play(dto);
 
             var response = ResponseMapper.MapMetadata<GameInstanceDto>(gameInstanceResponse);
-            response.Data = GameInstanceMapper.Map(gameInstanceResponse.Data);
+            response.Data = GameInstanceMapper.Map(GameInstanceLogic.Get(dto.Id));
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public ActionResult<IResponse<object>> RefreshCheck(RefreshCheckDto dto)
+        {
+            var gameInstance = GameInstanceLogic.Get(dto.Id);
+            if (gameInstance == null) return NotFound(gameInstance);
+
+            var response = new Response<GameInstanceDto>();
+
+            if (gameInstance.State.DateCreated <= dto.Date)
+                return Ok();
+
+            response.Data = GameInstanceMapper.Map(gameInstance);
             return Ok(response);
         }
     }

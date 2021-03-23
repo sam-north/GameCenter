@@ -1,3 +1,19 @@
-<p>play-mancala works!</p>
-
-<img src="assets/images/mancala-example-layout.png">
+<h3>{{whosTurnMessage}}</h3>
+<main>
+    <div id="opponent-keep" class="keep">
+        {{perspectiveGameState.opposingPlayer.board[6]}}
+    </div>
+    <div id="opponent-slots" class="slots">
+        <div *ngFor="let val of columns; let i = index" class="slot">
+            {{perspectiveGameState.opposingPlayer.board[i]}}
+        </div>
+    </div>
+    <div id="player-slots" class="slots">
+        <div *ngFor="let val of columns; let i = index" class="slot" (click)="currentPlayerSlotClick(i)">
+            {{perspectiveGameState.currentPlayer.board[i]}}
+        </div>
+    </div>
+    <div id="player-keep" class="keep">
+        {{perspectiveGameState.currentPlayer.board[6]}}
+    </div>
+</main>

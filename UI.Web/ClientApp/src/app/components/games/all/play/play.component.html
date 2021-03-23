@@ -1,13 +1,12 @@
-<h3>{{model.gameDisplayName}}</h3>
-<p>Created on {{model.dateCreated | date:'medium'}}</p>
-<h4>Players</h4>
-<ul>
-    <li *ngFor="let user of model.users">{{user.userEmail}}</li>
-</ul>
-
-<h4>State</h4>
-<p>{{model.state.dataAsJson}}</p>
-<app-play-checkers *ngIf="model.gameId === 3"></app-play-checkers>
-<app-play-connect-four *ngIf="model.gameId === 2"></app-play-connect-four>
-<app-play-mancala *ngIf="model.gameId === 1"></app-play-mancala>
-<app-play-tic-tac-toe *ngIf="model.gameId === 4"></app-play-tic-tac-toe>
+<div *ngIf="model && model.state">
+    <h3>{{model.gameDisplayName}}</h3>
+    <p>Created on {{model.dateCreated | date:'medium'}}</p>
+    <h4>Players</h4>
+    <ul>
+        <li *ngFor="let user of model.users">{{user.userEmail}}</li>
+    </ul>
+    <app-play-checkers *ngIf="model.gameId === 3"></app-play-checkers>
+    <app-play-connect-four *ngIf="model.gameId === 2"></app-play-connect-four>
+    <app-play-mancala *ngIf="model.gameId === 1" [gameState]="model.state.dataAsJson" (userInputReceived)="handleUserInput($event)"></app-play-mancala>
+    <app-play-tic-tac-toe *ngIf="model.gameId === 4"></app-play-tic-tac-toe>
+</div>

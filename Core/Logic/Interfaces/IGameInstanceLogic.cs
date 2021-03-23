@@ -11,7 +11,7 @@ namespace Core.Logic.Interfaces
         ICollection<GameInstance> Get();
         ICollection<GameInstance> GetCurrentUserGameInstancesWithoutGameStates();
         GameInstance Get(Guid id);
-        GameInstance Save(GameInstance modelToSave);
+        GameInstance Save(GameInstance modelToSave, GameInstanceState gameInstanceState = null);
         void Delete(Guid id);
         IResponse<GameInstance> New(CreateGameInstanceDto dto);
         IResponse<GameInstance> Play(PlayGameInstanceDto dto);

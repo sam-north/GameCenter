@@ -63,7 +63,7 @@ namespace Core.Logic.Concretes
             return entity;
         }
 
-        public GameInstance Save(GameInstance modelToSave)
+        public GameInstance Save(GameInstance modelToSave, GameInstanceState gameInstanceState = null)
         {
             var entity = Get(modelToSave.Id); //ModelContext.GameInstances.SingleOrDefault(x => x.Id == modelToSave.Id);
 
@@ -78,7 +78,7 @@ namespace Core.Logic.Concretes
             }
 
             SaveUsers(entity.Id, modelToSave.Users);
-            SaveState(entity.Id, modelToSave.State);
+            SaveState(entity.Id, gameInstanceState ?? modelToSave.State);
 
             ModelContext.SaveChanges();
             return entity;
@@ -174,7 +174,7 @@ namespace Core.Logic.Concretes
                 UserId = RequestContext.UserId,
                 Role = GameInstanceRoles.Player.ToString(),
                 User = user
-            }) ;
+            });
             var opposingUser = UserLogic.Get(dto.OpponentEmail);
             gameInstance.Users.Add(new GameInstanceUser
             {
@@ -203,9 +203,8 @@ namespace Core.Logic.Concretes
                 return response;
 
             var newGameState = CreateGameStateObject(newGameStateAsJsonStringResponse.Data);
-            gameInstance.State = newGameState;
 
-            response.Data = Save(gameInstance);
+            response.Data = Save(gameInstance, newGameState);
             return response;
         }
     }
