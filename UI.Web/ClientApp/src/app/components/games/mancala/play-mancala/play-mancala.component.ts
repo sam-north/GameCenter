@@ -47,5 +47,8 @@ export class PlayMancalaComponent implements OnChanges {
       this.perspectiveGameState.opposingPlayer = JSON.parse(JSON.stringify(gameState.player1));
     }
     this.whosTurnMessage = this.perspectiveGameState.isCurrentPlayerTurn ? `It's your turn!` : `It's ${this.perspectiveGameState.opposingPlayer.user.userEmail}'s turn!`;
+
+    if (!this.perspectiveGameState.gameIsPlayable) 
+      this.whosTurnMessage = `The game has ended!`;
   }
 }

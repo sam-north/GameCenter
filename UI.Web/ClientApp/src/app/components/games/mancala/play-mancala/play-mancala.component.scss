@@ -1,7 +1,9 @@
+@import '../../../../../styles/theme';
+
 main{    
     display: grid;
     grid-template-rows: 250px 250px;
-    color: #fff;
+    color: map-get($theme-colors, "secondary");
     font-size: 3em;
 }
 
@@ -10,16 +12,16 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid map-get($theme-colors, "primary");
 }
 
 
 #opponent-keep{
-    background-color: red;
+    background-color: map-get($theme-colors, "danger");
 }
 
 #player-keep{
-    background-color: blue;
+    background-color: map-get($theme-colors, "primary");
 }
 
 .slots{
@@ -33,34 +35,27 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
+    border: 1px solid map-get($theme-colors, "primary");
+    background-color: map-get($theme-colors, "info");
+    color: map-get($theme-colors, "primary");
 }
 
 #opponent-slots{
     grid-row: 1;
-
-    .slot{
-        background-color: orange;
-    }
 }
 
 #player-slots{
     grid-row: 2;
-
-    .slot{
-        background-color: green;
-
-    }
     .slot:hover{
         cursor: pointer;
-        background-color: pink;
-        border: 1px solid blue;
-        color: black;
+        background-color: map-get($theme-colors, "success");
+        border: 1px solid map-get($theme-colors, "info");;
+        color: map-get($theme-colors, "primary");
     }
     .slot:active{
         cursor: pointer;
-        background-color: black;
-        border: 1px solid grey;
-        color: white;
+        background-color: map-get($theme-colors, "primary");
+        border: 1px solid map-get($theme-colors, "info");
+        color: map-get($theme-colors, "secondary");
     }
 }
