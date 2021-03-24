@@ -1,11 +1,11 @@
-<h3>{{whosTurnMessage}}</h3>
+
 <main>
     <div id="opponent-keep" class="keep">
         {{perspectiveGameState.opposingPlayer.board[6]}}
     </div>
     <div id="opponent-slots" class="slots">
         <div *ngFor="let val of columns; let i = index" class="slot">
-            {{perspectiveGameState.opposingPlayer.board[i]}}
+            {{perspectiveGameState.opposingPlayer.board[columns.length - 1 - i]}}
         </div>
     </div>
     <div id="player-slots" class="slots">
@@ -17,3 +17,4 @@
         {{perspectiveGameState.currentPlayer.board[6]}}
     </div>
 </main>
+<h3>{{whosTurnMessage}}</h3>
