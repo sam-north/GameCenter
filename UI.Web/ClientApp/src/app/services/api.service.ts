@@ -16,9 +16,13 @@ import { GameInstanceUserMessageDto } from '../models/GameInstanceUserMessageDto
   providedIn: 'root'
 })
 export class ApiService {
+  getRootUrl(): string {
+    const origin :string = window.location.origin;
+    return origin;
+  }
   url: string = window.location.href;
   arr: string[] = this.url.split("/");
-  rootUrl: string = "https://localhost:44353"
+  rootUrl: string = this.getRootUrl();
 
   constructor(private http: HttpClient) { }
 
@@ -52,6 +56,7 @@ export class ApiService {
     ).toPromise();
   }
   signInUser(signInModel: SignIn): Promise<void> {
+    this.getRootUrl();
     return this.http.post<void>(`${this.rootUrl}/User/SignIn`,
       {
         email: signInModel.email,

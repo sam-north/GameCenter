@@ -52,6 +52,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Route("{id}")]
         public ActionResult<IResponse<object>> Get(Guid id)
         {
@@ -64,6 +65,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         [Route("{id}")]
         public ActionResult<IResponse<object>> GetChat(Guid id)
         {
