@@ -6,8 +6,28 @@
     <app-play-tic-tac-toe *ngIf="model.gameId === 4"></app-play-tic-tac-toe>
     
     <p>Created on {{model.dateCreated | date:'medium'}}</p>
-    <h4>Players</h4>
-    <ul>
-        <li *ngFor="let user of model.users">{{user.userEmail}}</li>
-    </ul>
+    
+    <div class="container">
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-2">Message</div>
+            <div class="col-4"><input type="text" id="messageInput"[(ngModel)]="messageInput" /></div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+            <div class="col-6">
+                <input type="button" id="sendButton" value="Send Message" (click)="messageClick()" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <ul id="messagesList"></ul>
+        </div>
+    </div>
 </div>

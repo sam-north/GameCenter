@@ -29,8 +29,6 @@ export class PlayMancalaComponent implements OnChanges {
   }
 
   translateGameStateToPerspective(currentValue: string) {
-    console.log(`translateGameStateToPerspective`);
-
     let gameState: MancalaGameState = JSON.parse(currentValue);
     let client: any = this.god.client.getClient();
 

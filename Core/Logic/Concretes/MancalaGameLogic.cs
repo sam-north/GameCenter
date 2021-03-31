@@ -1,4 +1,5 @@
 ﻿using Core.Framework.Models;
+using Core.Framework.Serializers;
 using Core.Logic.Interfaces;
 using Core.Mappers.Interfaces;
 using Core.Models;
@@ -6,7 +7,6 @@ using Core.Models.Constants;
 using Core.Models.Games;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace Core.Logic.Concretes
 {
@@ -46,23 +46,12 @@ namespace Core.Logic.Concretes
         private void LoadGame(GameInstance gameInstanceWithPreviousState)
         {
             if (gameInstanceWithPreviousState != null)
-            {
-                var serializeOptions = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
-                _gameState = JsonSerializer.Deserialize<MancalaGameState>(gameInstanceWithPreviousState.State.DataAsJson, serializeOptions);
-            }
+                _gameState = JsonSerializer.Deserialize<MancalaGameState>(gameInstanceWithPreviousState.State.DataAsJson);
         }
 
         private string CreateGameStateAsString()
         {
-            var serializeOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-            };
-            string jsonString = JsonSerializer.Serialize(_gameState, serializeOptions);
-            return jsonString;
+            return JsonSerializer.Serialize(_gameState);
         }
 
         private void CheckGameState(int userId, string input)

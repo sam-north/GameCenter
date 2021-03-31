@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UI.Web.Hubs;
 using UI.Web.Models;
 
 namespace GameCenter
@@ -33,6 +34,7 @@ namespace GameCenter
                     .AddCookie();
             services.AddControllersWithViews();
             services.AddHttpContextAccessor();
+            services.AddSignalR();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -75,6 +77,7 @@ namespace GameCenter
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
+                endpoints.MapHub<GameHub>("/gameHub");
             });
 
             app.UseSpa(spa =>

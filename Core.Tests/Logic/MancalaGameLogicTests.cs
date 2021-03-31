@@ -1,3 +1,4 @@
+using Core.Framework.Serializers;
 using Core.Logic.Concretes;
 using Core.Logic.Interfaces;
 using Core.Mappers.Interfaces;
@@ -9,7 +10,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 
 namespace Core.Tests.Logic
 {
@@ -58,7 +58,7 @@ namespace Core.Tests.Logic
 
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"HasGameBeenSetup\":true,\"GameIsPlayable\":true,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,4,4,4,4,4,0],\"User\":{\"UserId\":398,\"Role\":\"Player\",\"UserEmail\":null}},\"Player2\":{\"Board\":[4,4,4,4,4,4,0],\"User\":{\"UserId\":66246,\"Role\":\"Player\",\"UserEmail\":null}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":398,\"role\":\"player\",\"userEmail\":null}},\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":66246,\"role\":\"player\",\"userEmail\":null}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
@@ -77,7 +77,7 @@ namespace Core.Tests.Logic
             var result = _mancalaGameLogic.GetDefaultGameState(_gameInstance);
 
             //assert
-            Assert.AreEqual("{\"HasGameBeenSetup\":true,\"GameIsPlayable\":true,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,4,4,4,4,4,0],\"User\":{\"UserId\":0,\"Role\":null,\"UserEmail\":null}},\"Player2\":{\"Board\":[4,4,4,4,4,4,0],\"User\":{\"UserId\":0,\"Role\":null,\"UserEmail\":null}}}", result);
+            Assert.AreEqual("{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":0,\"role\":null,\"userEmail\":null}},\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":0,\"role\":null,\"userEmail\":null}}}", result);
         }
 
         [TestMethod]
@@ -217,7 +217,7 @@ namespace Core.Tests.Logic
             Arrange();
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"HasGameBeenSetup\":true,\"GameIsPlayable\":true,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,0,4,4,4,4,0],\"User\":{\"UserId\":398,\"Role\":\"Player\",\"UserEmail\":null}},\"Player2\":{\"Board\":[4,4,4,4,4,4,0],\"User\":{\"UserId\":66246,\"Role\":\"Player\",\"UserEmail\":null}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,0,4,4,4,4,0],\"user\":{\"userId\":398,\"role\":\"Player\",\"userEmail\":null}},\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":66246,\"role\":\"Player\",\"userEmail\":null}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
@@ -239,7 +239,7 @@ namespace Core.Tests.Logic
             Arrange();
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"HasGameBeenSetup\":true,\"GameIsPlayable\":true,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,0,3,3,3,3,1],\"User\":{\"UserId\":398,\"Role\":\"Player\",\"UserEmail\":null}},\"Player2\":{\"Board\":[6,6,6,6,6,6,2],\"User\":{\"UserId\":66246,\"Role\":\"Player\",\"UserEmail\":null}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,0,3,3,3,3,1],\"user\":{\"userId\":398,\"role\":\"Player\",\"userEmail\":null}},\"player2\":{\"board\":[6,6,6,6,6,6,2],\"user\":{\"userId\":66246,\"role\":\"Player\",\"userEmail\":null}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
@@ -338,7 +338,7 @@ namespace Core.Tests.Logic
             Arrange();
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"HasGameBeenSetup\":true,\"GameIsPlayable\":false,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,0,3,3,3,3,33],\"User\":{\"UserId\":398,\"Role\":\"Player\",\"UserEmail\":null}},\"Player2\":{\"Board\":[6,6,6,6,6,6,33],\"User\":{\"UserId\":66246,\"Role\":\"Player\",\"UserEmail\":null}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":false,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,0,3,3,3,3,33],\"user\":{\"userId\":398,\"role\":\"Player\",\"userEmail\":null}},\"player2\":{\"board\":[6,6,6,6,6,6,33],\"user\":{\"userId\":66246,\"role\":\"Player\",\"userEmail\":null}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
@@ -360,7 +360,7 @@ namespace Core.Tests.Logic
             Arrange();
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"HasGameBeenSetup\":true,\"GameIsPlayable\":false,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,0,3,3,3,3,44],\"User\":{\"UserId\":398,\"Role\":\"Player\",\"UserEmail\":\"dingleberry@dingle.com\"}},\"Player2\":{\"Board\":[6,6,6,6,6,6,23],\"User\":{\"UserId\":66246,\"Role\":\"Player\",\"UserEmail\":\"hipster@shorts.com\"}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":false,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,0,3,3,3,3,44],\"user\":{\"userId\":398,\"role\":\"Player\",\"userEmail\":\"dingleberry@dingle.com\"}},\"player2\":{\"board\":[6,6,6,6,6,6,23],\"user\":{\"userId\":66246,\"role\":\"Player\",\"userEmail\":\"hipster@shorts.com\"}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
@@ -383,7 +383,7 @@ namespace Core.Tests.Logic
             Arrange();
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"HasGameBeenSetup\":true,\"GameIsPlayable\":false,\"IsPlayer1Turn\":true,\"Player1\":{\"Board\":[4,0,3,3,3,3,12],\"User\":{\"UserId\":398,\"Role\":\"Player\",\"UserEmail\":\"dingleberry@dingle.com\"}},\"Player2\":{\"Board\":[6,6,6,6,6,6,19],\"User\":{\"UserId\":66246,\"Role\":\"Player\",\"UserEmail\":\"hipster@shorts.com\"}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":false,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,0,3,3,3,3,12],\"user\":{\"userId\":398,\"role\":\"Player\",\"userEmail\":\"dingleberry@dingle.com\"}},\"player2\":{\"board\":[6,6,6,6,6,6,19],\"user\":{\"userId\":66246,\"role\":\"Player\",\"userEmail\":\"hipster@shorts.com\"}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
