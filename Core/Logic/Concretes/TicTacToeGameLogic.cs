@@ -24,12 +24,6 @@ namespace Core.Logic.Concretes
 
         }
 
-        private string CreateGameStateAsString()
-        {
-            string jsonString = JsonSerializer.Serialize(_gameState);
-            return jsonString;
-        }
-
         private void SetupGame()
         {
             var playerUsers = _gameInstanceUsers.Where(x => x.Role == GameInstanceRoles.Player.ToString());
@@ -49,11 +43,83 @@ namespace Core.Logic.Concretes
             return gameInstanceUser.User.Email;
         }
 
+
+        
+
         public IResponse<string> LoadAndPlayAndReturnGameStateAsString(GameInstance gameInstanceWithPreviousState, int userId, string userInput)
         {
-            var response = new Response<string>();
+            _gameInstanceUsers = gameInstanceWithPreviousState.Users;
 
+            LoadGame(gameInstanceWithPreviousState);
+            Play(userId, userInput);
+            var response = new Response<string>();
+ 
             return response;
+        }
+
+        private void Play(int userId, string userInput)
+        {
+            CheckGameState(userId, userInput);
+        }
+
+        private void LoadGame(GameInstance gameInstanceWithPreviousState)
+        {
+            if (gameInstanceWithPreviousState != null)
+                _gameState = JsonSerializer.Deserialize<TicTacToeGameState>(gameInstanceWithPreviousState.State.DataAsJson);
+        }
+
+        private string CreateGameStateAsString()
+        {
+            string jsonString = JsonSerializer.Serialize(_gameState);
+            return jsonString;
+        }
+        
+        private void CheckGameState(int userId, string input)
+        {
+            if (_gameState.Winner == null) Turn(userId, input);
+            else AnnounceWinner();
+        }
+
+        private void AnnounceWinner()
+        {
+            // TODO write this
+            throw new NotImplementedException();
+        }
+
+        private void Turn(int userId, string input)
+        {
+            _gameState.Winner = CheckForEndOfGame();
+        }
+
+        private string CheckForEndOfGame()
+        {
+            int[,] lines = {
+                {0, 1, 2},
+                {3, 4, 5},
+                {6, 7, 8},
+                {0, 3, 6},
+                {1, 4, 7},
+                {2, 5, 8},
+                {0, 4, 8},
+                {2, 4, 8}
+            };
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                int a = lines[i, 0];
+                int b = lines[i, 1];
+                int c = lines[i, 2];
+                if (
+                    _gameState.Board[a] != null &
+                   (_gameState.Board[a] == _gameState.Board[b]) &
+                   (_gameState.Board[a] == _gameState.Board[c])
+                    )
+                {
+                    return _gameState.Board[a];
+                };
+
+            }
+            return null;
         }
     }
 }
