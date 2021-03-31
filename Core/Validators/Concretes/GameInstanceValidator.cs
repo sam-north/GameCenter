@@ -3,6 +3,7 @@ using Core.Logic.Interfaces;
 using Core.Models.Constants;
 using Core.Models.Dtos;
 using Core.Validators.Interfaces;
+using System;
 using System.Linq;
 
 namespace Core.Validators.Concretes
@@ -43,6 +44,20 @@ namespace Core.Validators.Concretes
                 response.Errors.Add("That game is invalid.");
             if (string.IsNullOrWhiteSpace(dto.UserInput))
                 response.Errors.Add("User input is invalid.");
+            return response;
+        }
+
+        public IResponse<string> Validate(ChatMessageDto dto)
+        {
+            var response = new Response<string>();
+            if (dto.Id == Guid.Empty)
+                response.Errors.Add("invalid game instance");
+            if (string.IsNullOrWhiteSpace(dto.Text) || dto.Text.Length > 500)
+                response.Errors.Add("invalid message text");
+
+            var gameInstance = GameInstanceLogic.Get(dto.Id);
+            if (gameInstance == null || !gameInstance.Users.Any(x => x.UserId == RequestContext.UserId))
+                response.Errors.Add("That game is invalid.");
             return response;
         }
     }

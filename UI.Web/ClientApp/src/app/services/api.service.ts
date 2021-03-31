@@ -10,6 +10,7 @@ import { CreateGameInstanceDto } from '../models/CreateGameInstanceDto';
 import { GameInstanceDto } from '../models/GameInstanceDto';
 import { UserGameInstanceStatelessDto } from '../models/UserGameInstanceStatelessDto';
 import { PlayGameInstanceDto } from '../models/PlayGameInstanceDto';
+import { GameInstanceUserMessageDto } from '../models/GameInstanceUserMessageDto';
 
 @Injectable({
   providedIn: 'root'
@@ -90,6 +91,9 @@ export class ApiService {
   }
   getGameInstance(id: string): Promise<Response<GameInstanceDto>> {
     return this.http.get<Response<GameInstanceDto>>(`${this.rootUrl}/usergame/get/${id}`).toPromise();
+  }
+  getGameInstanceChat(id: string): Promise<Response<GameInstanceUserMessageDto[]>> {
+    return this.http.get<Response<GameInstanceUserMessageDto[]>>(`${this.rootUrl}/usergame/getchat/${id}`).toPromise();
   }
   getUserGames(): Promise<Response<UserGameInstanceStatelessDto[]>> {
     return this.http.get<Response<UserGameInstanceStatelessDto[]>>(`${this.rootUrl}/usergame/get`).toPromise();

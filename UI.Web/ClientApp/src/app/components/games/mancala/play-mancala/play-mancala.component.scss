@@ -2,7 +2,7 @@
 
 main{    
     display: grid;
-    grid-template-rows: 250px 250px;
+    grid-template-rows: 150px 150px;
     color: map-get($theme-colors, "secondary");
     font-size: 3em;
 }

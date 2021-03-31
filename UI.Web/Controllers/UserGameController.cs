@@ -17,12 +17,14 @@ namespace UI.Web.Controllers
         public IGameInstanceLogic GameInstanceLogic { get; }
         public IGameInstanceMapper GameInstanceMapper { get; }
         public IGameInstanceValidator GameInstanceValidator { get; }
+        public IGameInstanceUserMessageLogic GameInstanceUserMessageLogic { get; }
 
-        public UserGameController(IGameInstanceLogic gameInstanceLogic, IGameInstanceMapper gameInstanceMapper, IGameInstanceValidator gameInstanceValidator)
+        public UserGameController(IGameInstanceLogic gameInstanceLogic, IGameInstanceMapper gameInstanceMapper, IGameInstanceValidator gameInstanceValidator, IGameInstanceUserMessageLogic gameInstanceUserMessageLogic)
         {
             GameInstanceLogic = gameInstanceLogic;
             GameInstanceMapper = gameInstanceMapper;
             GameInstanceValidator = gameInstanceValidator;
+            GameInstanceUserMessageLogic = gameInstanceUserMessageLogic;
         }
 
         [HttpPost]
@@ -58,6 +60,18 @@ namespace UI.Web.Controllers
 
             var response = new Response<GameInstanceDto>();
             response.Data = GameInstanceMapper.Map(gameInstance);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult<IResponse<object>> GetChat(Guid id)
+        {
+            var gameInstanceMessages = GameInstanceUserMessageLogic.GetViewResults(id);
+            if (gameInstanceMessages == null) return NotFound(gameInstanceMessages);
+
+            var response = new Response<ICollection<GameInstanceUserMessageDto>>();
+            response.Data = GameInstanceMapper.Map(gameInstanceMessages);
             return Ok(response);
         }
 

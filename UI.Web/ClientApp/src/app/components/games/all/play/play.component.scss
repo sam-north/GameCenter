@@ -1,0 +1,26 @@
+#chat-window {
+    overflow: hidden;
+    padding: 10px;
+}
+
+#chat-history{
+    padding: 10px;
+    border-radius: 5px;
+    border: solid 1px #ccc;
+    height: 400px;
+    overflow: auto;
+
+    .chat-message{
+        margin:0;
+        font-weight: 100;
+        font-size: .9em;
+
+        strong{
+            font-weight: 600;
+        }
+    }
+}
+#chat-input{
+    padding-left: 0;
+    padding-right:0;
+}

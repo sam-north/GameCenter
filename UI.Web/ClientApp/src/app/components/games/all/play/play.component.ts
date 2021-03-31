@@ -1,40 +1,48 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GameInstanceDto } from 'src/app/models/GameInstanceDto';
 import { GodService } from 'src/app/services/god.service';
-import { HubConnection, HubConnectionBuilder} from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { GameInstanceUserMessageDto } from 'src/app/models/GameInstanceUserMessageDto';
+import { Client } from 'src/app/models/Client';
 
 @Component({
   selector: 'app-play',
   templateUrl: './play.component.html',
   styleUrls: ['./play.component.scss']
 })
-export class PlayComponent implements OnInit, OnDestroy {
+export class PlayComponent implements OnInit, AfterContentInit, OnDestroy {
 
   model: GameInstanceDto = new GameInstanceDto();
+  chatMessages: GameInstanceUserMessageDto[] = [];
   refreshCheckInterval;
   messageInput: string;
   connection: HubConnection;
+  currentUser: Client;
+  @ViewChild("chatHistoryWindow") chatHistoryWindow: ElementRef;
   constructor(private activatedRoute: ActivatedRoute, private god: GodService) { }
-  
+
+  async ngAfterContentInit(): Promise<void> {
+    let id: string = this.activatedRoute.snapshot.params['id'];
+    await this.loadChatHistory(id);
+  }
 
   async ngOnInit(): Promise<void> {
     let id: string = this.activatedRoute.snapshot.params['id'];
+    this.currentUser = this.god.client.getClient();
 
-    await this.setupSignalRConnection(id);    
-    this.load(id);
+    await this.setupSignalRConnection(id);
+    await this.load(id);
+    await this.loadChatHistory(id);
   }
 
-  private async setupSignalRConnection(id: string) {    
+  private async setupSignalRConnection(id: string) {
     let that = this;
     that.connection = new HubConnectionBuilder().withUrl("/gameHub").build();
 
-    that.connection.on("ReceiveMessage", function (user, message) {
-      var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-      var encodedMsg = user + " says " + msg;
-      var li = document.createElement("li");
-      li.textContent = encodedMsg;
-      document.getElementById("messagesList").appendChild(li);
+    that.connection.on("ReceiveMessage", function (message: GameInstanceUserMessageDto) {
+      that.chatMessages.push(message);
+      that.scrollBottomOfChatHistory(100);
     });
 
     that.connection.on("Refresh", async function () {
@@ -53,28 +61,39 @@ export class PlayComponent implements OnInit, OnDestroy {
     this.connection
       .invoke("SubscribeToGame", id)
       .catch(function (err) {
-          return console.error(err.toString());
+        return console.error(err.toString());
       });
+  }
+  scrollBottomOfChatHistory(bufferTimeout) {
+    setTimeout(() => {
+      this.chatHistoryWindow.nativeElement.scrollTop = this.chatHistoryWindow.nativeElement.scrollHeight;
+    }, bufferTimeout);
   }
 
   async ngOnDestroy(): Promise<void> {
     await this.connection
-    .invoke("UnsubscribeFromGame", this.model.id)
-    .catch(function (err) {
+      .invoke("UnsubscribeFromGame", this.model.id)
+      .catch(function (err) {
         return console.error(err.toString());
-    });
+      });
 
     this.connection.stop()
-    .then(function () {
-    })
-    .catch(function (err) {
-      return console.error(err.toString());
-    });
+      .then(function () {
+      })
+      .catch(function (err) {
+        return console.error(err.toString());
+      });
   }
 
   async load(id: string) {
     const response = await this.god.api.getGameInstance(id);
     this.model = response.data;
+  }
+
+  async loadChatHistory(id: string) {
+    const response = await this.god.api.getGameInstanceChat(id);
+    this.chatMessages = response.data;
+    this.scrollBottomOfChatHistory(100);
   }
 
   async handleUserInput(data: any) {
@@ -85,24 +104,21 @@ export class PlayComponent implements OnInit, OnDestroy {
       this.god.notifications.dangerList(response.errors);
     else
       this.connection
-      .invoke("GameUpdated", this.model.id)
-      .catch(function (err) {
-          return console.error(err.toString());
-      });
-
-  }
-
-  async messageClick(){
-    this.connection
-        .invoke("SendMessage", this.model.id, this.messageInput)
+        .invoke("GameUpdated", this.model.id)
         .catch(function (err) {
-            return console.error(err.toString());
+          return console.error(err.toString());
         });
+
   }
-  
+
+  async sendMessage() {
+    if (this.messageInput && this.messageInput.length) {
+      await this.connection
+        .invoke("SendMessage", { id: this.model.id, text: this.messageInput})
+        .catch(function (err) {
+          return console.error(err.toString());
+        });
+      this.messageInput = null;
+    }
+  }
 }
-
-
-
-
-

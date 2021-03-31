@@ -7,5 +7,6 @@ namespace Core.Validators.Interfaces
     {
         IResponse<string> Validate(CreateGameInstanceDto dto);
         IResponse<string> Validate(PlayGameInstanceDto dto);
+        IResponse<string> Validate(ChatMessageDto dto);
     }
 }

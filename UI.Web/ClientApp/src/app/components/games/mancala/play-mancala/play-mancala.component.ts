@@ -30,12 +30,12 @@ export class PlayMancalaComponent implements OnChanges {
 
   translateGameStateToPerspective(currentValue: string) {
     let gameState: MancalaGameState = JSON.parse(currentValue);
-    let client: any = this.god.client.getClient();
+    let client = this.god.client.getClient();
 
     this.perspectiveGameState.hasGameBeenSetup = gameState.hasGameBeenSetup;
     this.perspectiveGameState.gameIsPlayable = gameState.gameIsPlayable;
 
-    if (gameState.player1.user.userId === client) {
+    if (gameState.player1.user.userId === client.id) {
       this.perspectiveGameState.isCurrentPlayerTurn = gameState.isPlayer1Turn;
       this.perspectiveGameState.currentPlayer = JSON.parse(JSON.stringify(gameState.player1));
       this.perspectiveGameState.opposingPlayer = JSON.parse(JSON.stringify(gameState.player2));

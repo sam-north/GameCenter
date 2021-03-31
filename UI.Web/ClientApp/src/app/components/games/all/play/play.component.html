@@ -1,33 +1,28 @@
 <div *ngIf="model && model.state">
-    <h3>{{model.gameDisplayName}}</h3>
+    <h3 class="d-inline me-2">{{model.gameDisplayName}}</h3><span class="d-inline">Created on {{model.dateCreated |
+        date:'medium'}}</span>
     <app-play-checkers *ngIf="model.gameId === 3"></app-play-checkers>
     <app-play-connect-four *ngIf="model.gameId === 2"></app-play-connect-four>
-    <app-play-mancala *ngIf="model.gameId === 1" [gameState]="model.state.dataAsJson" (userInputReceived)="handleUserInput($event)"></app-play-mancala>
+    <app-play-mancala *ngIf="model.gameId === 1" [gameState]="model.state.dataAsJson"
+        (userInputReceived)="handleUserInput($event)"></app-play-mancala>
     <app-play-tic-tac-toe *ngIf="model.gameId === 4"></app-play-tic-tac-toe>
-    
-    <p>Created on {{model.dateCreated | date:'medium'}}</p>
-    
-    <div class="container">
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-2">Message</div>
-            <div class="col-4"><input type="text" id="messageInput"[(ngModel)]="messageInput" /></div>
+</div>
+
+<div id="chat-window" class="row">
+    <div class="row">
+        <div #chatHistoryWindow id="chat-history" class="col-6">
+            <p *ngFor="let message of chatMessages" class="chat-message"  
+                title="{{message.dateCreated | date:'medium' }}">
+                <strong [ngClass]="message.userId === currentUser.id ? 'text-success' : 'text-primary'">{{message.userEmail}}:</strong> {{message.text}}
+            </p>
         </div>
-        <div class="row">&nbsp;</div>
-        <div class="row">
-            <div class="col-6">
-                <input type="button" id="sendButton" value="Send Message" (click)="messageClick()" />
+    </div>
+    <div class="row mt-2">
+        <div id="chat-input" class="col-6">
+            <div class="input-group">
+                <input (keyup.enter)="sendMessage()" type="text" class="form-control d-inline" [(ngModel)]="messageInput" />
+                <button class="btn btn-primary d-inline" (click)="sendMessage()">Send</button>
             </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <hr />
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-6">
-            <ul id="messagesList"></ul>
         </div>
     </div>
 </div>

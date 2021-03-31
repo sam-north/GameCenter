@@ -2,6 +2,7 @@
 using Core.Mappers.Interfaces;
 using Core.Models;
 using Core.Models.Dtos;
+using Core.Models.Views;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -64,6 +65,36 @@ namespace Core.Mappers.Concretes
             target.Id = source.Id;
             target.Users = Map(source.Users);
             target.Users = target.Users.Where(x => x.UserId != RequestContext.UserId).ToList();
+            return target;
+        }
+
+        public ICollection<GameInstanceUserMessageDto> Map(ICollection<GameInstanceUserMessageViewResult> messages)
+        {
+            var targets = new List<GameInstanceUserMessageDto>();
+            foreach (var message in messages)
+                targets.Add(Map(message));
+            return targets;
+        }
+
+        public GameInstanceUserMessageDto Map(GameInstanceUserMessage source)
+        {
+            var target = new GameInstanceUserMessageDto();
+            target.DateCreated = source.DateCreated;
+            target.Id = source.Id;
+            target.Text = source.Text;
+            target.UserEmail = source.User?.Email;
+            target.UserId = source.UserId;
+            return target;
+        }
+
+        private GameInstanceUserMessageDto Map(GameInstanceUserMessageViewResult source)
+        {
+            var target = new GameInstanceUserMessageDto();
+            target.DateCreated = source.DateCreated;
+            target.Id = source.Id;
+            target.Text = source.Text;
+            target.UserEmail = source.UserEmail;
+            target.UserId = source.UserId;
             return target;
         }
 

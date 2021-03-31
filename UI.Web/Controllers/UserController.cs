@@ -1,4 +1,5 @@
 ﻿using Core.Framework.Models;
+using Core.Framework.Serializers;
 using Core.Logic.Interfaces;
 using Core.Mappers.Interfaces;
 using Core.Models.Dtos;
@@ -78,7 +79,7 @@ namespace UI.Web.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                HttpContext.Response.Cookies.Append("account", attemptCredentialsResponse.Data.Id.ToString(), new Microsoft.AspNetCore.Http.CookieOptions
+                HttpContext.Response.Cookies.Append("account", JsonSerializer.Serialize(new { id = attemptCredentialsResponse.Data.Id, email = dto.Email }), new Microsoft.AspNetCore.Http.CookieOptions
                 {
                     HttpOnly = false
                 });

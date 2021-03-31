@@ -63,6 +63,7 @@
     <Folder Include="PublishProfiles" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\Data" />
+    <Folder Include="dbo\Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Game.sql" />
@@ -71,6 +72,8 @@
     <Build Include="dbo\Tables\GameInstanceState.sql" />
     <Build Include="dbo\Tables\User.sql" />
     <Build Include="dbo\Tables\GameInstanceUser.sql" />
+    <Build Include="dbo\Tables\GameInstanceUserMessage.sql" />
+    <Build Include="dbo\Views\GameInstanceUserMessageView.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Data\Seed.Game.sql" />
