@@ -5,8 +5,11 @@ using Core.Mappers.Interfaces;
 using Core.Models.Dtos;
 using Core.Validators.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UI.Web.Hubs;
 
 namespace UI.Web.Controllers
 {
@@ -14,17 +17,23 @@ namespace UI.Web.Controllers
     [Route("[controller]/[action]")]
     public class UserGameController : ControllerBase
     {
-        public IGameInstanceLogic GameInstanceLogic { get; }
-        public IGameInstanceMapper GameInstanceMapper { get; }
-        public IGameInstanceValidator GameInstanceValidator { get; }
-        public IGameInstanceUserMessageLogic GameInstanceUserMessageLogic { get; }
+        private IGameInstanceLogic GameInstanceLogic { get; }
+        private IGameInstanceMapper GameInstanceMapper { get; }
+        private IGameInstanceValidator GameInstanceValidator { get; }
+        private IGameInstanceUserMessageLogic GameInstanceUserMessageLogic { get; }
+        public IHubContext<GameHub> GameHubContext { get; }
 
-        public UserGameController(IGameInstanceLogic gameInstanceLogic, IGameInstanceMapper gameInstanceMapper, IGameInstanceValidator gameInstanceValidator, IGameInstanceUserMessageLogic gameInstanceUserMessageLogic)
+        public UserGameController(IGameInstanceLogic gameInstanceLogic,
+            IGameInstanceMapper gameInstanceMapper,
+            IGameInstanceValidator gameInstanceValidator,
+            IGameInstanceUserMessageLogic gameInstanceUserMessageLogic,
+            IHubContext<GameHub> gameHubContext)
         {
             GameInstanceLogic = gameInstanceLogic;
             GameInstanceMapper = gameInstanceMapper;
             GameInstanceValidator = gameInstanceValidator;
             GameInstanceUserMessageLogic = gameInstanceUserMessageLogic;
+            GameHubContext = gameHubContext;
         }
 
         [HttpPost]
@@ -78,7 +87,7 @@ namespace UI.Web.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IResponse<object>> Play(PlayGameInstanceDto dto)
+        public async Task<ActionResult<IResponse<object>>> PlayAsync(PlayGameInstanceDto dto)
         {
             var validationResponse = GameInstanceValidator.Validate(dto);
             if (!validationResponse.IsValid) return BadRequest(validationResponse);
@@ -87,6 +96,8 @@ namespace UI.Web.Controllers
 
             var response = ResponseMapper.MapMetadata<GameInstanceDto>(gameInstanceResponse);
             response.Data = GameInstanceMapper.Map(GameInstanceLogic.Get(dto.Id));
+            if (response.IsValid)
+                await GameHubContext.Clients.Group(dto.Id.ToString()).SendAsync("Refresh");
             return Ok(response);
         }
 

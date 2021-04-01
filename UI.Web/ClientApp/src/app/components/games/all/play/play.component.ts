@@ -102,13 +102,6 @@ export class PlayComponent implements OnInit, AfterContentInit, OnDestroy {
       this.god.notifications.infoList(response.messages);
     if (response.errors.length)
       this.god.notifications.dangerList(response.errors);
-    else
-      this.connection
-        .invoke("GameUpdated", this.model.id)
-        .catch(function (err) {
-          return console.error(err.toString());
-        });
-
   }
 
   async sendMessage() {
