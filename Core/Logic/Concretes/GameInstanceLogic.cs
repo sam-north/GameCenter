@@ -185,10 +185,29 @@ namespace Core.Logic.Concretes
 
             //add state
             var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
-            gameInstance.State = CreateGameStateObject(gameStrategy.GetDefaultGameState(gameInstance));
+            gameInstance.State = CreateGameStateObject(gameStrategy != null ? gameStrategy.GetDefaultGameState(gameInstance) : "");
 
             response.Data = Save(gameInstance);
+
+            if (gameStrategy != null)
+                SaveGameStateHistory(response.Data.Id, gameInstance.State, $"Initiated game: {dto.GameId} against email: {dto.OpponentEmail}");
+
             return response;
+        }
+
+        private void SaveGameStateHistory(Guid gameInstanceId, GameInstanceState state, string message)
+        {
+
+            var historyEntity = new GameInstanceStateHistory
+            {
+                DateCreated = DateTimeOffset.Now,
+                DataAsJson = state.DataAsJson,
+                GameInstanceId = gameInstanceId,
+                Message = message
+            };
+
+            ModelContext.GameInstanceStateHistories.Add(historyEntity);
+            ModelContext.SaveChanges();
         }
 
         public IResponse<GameInstance> Play(PlayGameInstanceDto dto)
@@ -196,7 +215,7 @@ namespace Core.Logic.Concretes
             var gameInstance = Get(dto.Id);
             var gameStrategy = GameStrategyProvider.Provide(gameInstance.GameId);
 
-            var newGameStateAsJsonStringResponse = gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput);
+            var newGameStateAsJsonStringResponse = gameStrategy != null ? gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput) : new Response<string> { Data = "" };
             var response = ResponseMapper.MapMetadata<GameInstance>(newGameStateAsJsonStringResponse);
 
             if (!response.IsValid || response.Messages.Any(x => x.Contains("wins!")))
@@ -205,6 +224,10 @@ namespace Core.Logic.Concretes
             var newGameState = CreateGameStateObject(newGameStateAsJsonStringResponse.Data);
 
             response.Data = Save(gameInstance, newGameState);
+
+            if (gameStrategy != null)
+                SaveGameStateHistory(response.Data.Id, gameInstance.State, $"User Input: {dto.UserInput}");
+
             return response;
         }
     }

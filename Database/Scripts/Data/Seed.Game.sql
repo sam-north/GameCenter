@@ -9,7 +9,8 @@ USING (VALUES
   (1,'Mancala', 'Mancala', 0),
   (2,'ConnectFour', 'Connect Four', 0),
   (3,'Checkers', 'Checkers', 0),
-  (4,'TicTacToe', 'Tic Tac Toe', 0)
+  (4,'TicTacToe', 'Tic Tac Toe', 0),
+  (5,'Chat', 'Chat', 0)
 ) AS Source ([Id],[ReferenceName], [DisplayName], [IsDeleted])
 ON (Target.[Id] = Source.[Id])
 WHEN MATCHED THEN

@@ -74,6 +74,7 @@
     <Build Include="dbo\Tables\GameInstanceUser.sql" />
     <Build Include="dbo\Tables\GameInstanceUserMessage.sql" />
     <Build Include="dbo\Views\GameInstanceUserMessageView.sql" />
+    <Build Include="dbo\Tables\GameInstanceStateHistory.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\Data\Seed.Game.sql" />

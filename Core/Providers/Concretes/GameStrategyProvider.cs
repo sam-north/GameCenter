@@ -28,7 +28,7 @@ namespace Core.Providers.Concretes
                 case (int)Games.TicTacToe:
                     return ServiceProvider.GetService<ITicTacToeGameLogic>();
                 default:
-                    throw new NotImplementedException();
+                    return null;
             }
         }
     }

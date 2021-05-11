@@ -17,6 +17,7 @@ namespace Core.DataAccess
         public DbSet<Game> Games { get; set; }
         public DbSet<GameInstance> GameInstances { get; set; }
         public DbSet<GameInstanceState> GameInstanceStates { get; set; }
+        public DbSet<GameInstanceStateHistory> GameInstanceStateHistories { get; set; }
         public DbSet<GameInstanceUser> GameInstanceUsers { get; set; }
         public DbSet<GameInstanceUserMessage> GameInstanceUserMessages { get; set; }
         public DbSet<User> Users { get; set; }
