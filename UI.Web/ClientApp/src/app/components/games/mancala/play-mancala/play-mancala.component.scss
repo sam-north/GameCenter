@@ -39,6 +39,12 @@ main{
     background-color: map-get($theme-colors, "info");
     color: map-get($theme-colors, "primary");
 }
+#opponent-slots.true,
+#opponent-keep.true,
+#player-slots.false,
+#player-keep.false{
+    opacity: .5;
+}
 
 #opponent-slots{
     grid-row: 1;
@@ -46,13 +52,13 @@ main{
 
 #player-slots{
     grid-row: 2;
-    .slot:hover{
+    .slot.playable:hover{
         cursor: pointer;
         background-color: map-get($theme-colors, "success");
         border: 1px solid map-get($theme-colors, "info");;
         color: map-get($theme-colors, "primary");
     }
-    .slot:active{
+    .slot.playable:active{
         cursor: pointer;
         background-color: map-get($theme-colors, "primary");
         border: 1px solid map-get($theme-colors, "info");

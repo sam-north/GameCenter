@@ -13,6 +13,7 @@ namespace Core.Models
         public int GameId { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public bool IsDeleted { get; set; }
+        public string Result { get; set; }
 
         public Game Game { get; set; }
         public GameInstanceState State { get; set; }

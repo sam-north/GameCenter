@@ -58,7 +58,9 @@ namespace Core.Tests.Logic
 
             _gameInstance.State = new GameInstanceState
             {
-                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":398,\"role\":\"player\",\"userEmail\":null}},\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":66246,\"role\":\"player\",\"userEmail\":null}}}",
+                DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true," +
+                             "\"player1\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":398,\"role\":\"player\",\"userEmail\":null}}," +
+                             "\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":66246,\"role\":\"player\",\"userEmail\":null}}}",
                 DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
                 GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
                 Id = 3983
@@ -77,7 +79,7 @@ namespace Core.Tests.Logic
             var result = _mancalaGameLogic.GetDefaultGameState(_gameInstance);
 
             //assert
-            Assert.AreEqual("{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":0,\"role\":null,\"userEmail\":null}},\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":0,\"role\":null,\"userEmail\":null}}}", result);
+            Assert.AreEqual("{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true,\"player1\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":0,\"role\":null,\"userEmail\":null}},\"player2\":{\"board\":[4,4,4,4,4,4,0],\"user\":{\"userId\":0,\"role\":null,\"userEmail\":null}},\"result\":null}", result);
         }
 
         [TestMethod]
@@ -95,21 +97,11 @@ namespace Core.Tests.Logic
             Assert.AreEqual(true, result.GameIsPlayable);
             Assert.AreEqual(true, result.IsPlayer1Turn);
             Assert.IsNotNull(result.Player1);
-            Assert.AreEqual(4, result.Player1.Board[0]);
-            Assert.AreEqual(4, result.Player1.Board[1]);
-            Assert.AreEqual(4, result.Player1.Board[2]);
-            Assert.AreEqual(4, result.Player1.Board[3]);
-            Assert.AreEqual(4, result.Player1.Board[4]);
-            Assert.AreEqual(4, result.Player1.Board[5]);
-            Assert.AreEqual(0, result.Player1.Board[6]);
+            var expectedPlayer1Board = new int[] { 4,4,4,4,4,4,0 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer1Board, result.Player1.Board));
             Assert.IsNotNull(result.Player2);
-            Assert.AreEqual(4, result.Player2.Board[0]);
-            Assert.AreEqual(4, result.Player2.Board[1]);
-            Assert.AreEqual(4, result.Player2.Board[2]);
-            Assert.AreEqual(4, result.Player2.Board[3]);
-            Assert.AreEqual(4, result.Player2.Board[4]);
-            Assert.AreEqual(4, result.Player2.Board[5]);
-            Assert.AreEqual(0, result.Player2.Board[6]);
+            var expectedPlayer2Board = new int[] { 4, 4, 4, 4, 4, 4, 0 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer2Board, result.Player2.Board));
         }
 
         [TestMethod]
@@ -193,22 +185,60 @@ namespace Core.Tests.Logic
             Assert.AreEqual(true, parsedResult.GameIsPlayable);
             Assert.AreEqual(false, parsedResult.IsPlayer1Turn);
             Assert.IsNotNull(parsedResult.Player1);
-            Assert.AreEqual(4, parsedResult.Player1.Board[0]);
-            Assert.AreEqual(0, parsedResult.Player1.Board[1]);
-            Assert.AreEqual(5, parsedResult.Player1.Board[2]);
-            Assert.AreEqual(5, parsedResult.Player1.Board[3]);
-            Assert.AreEqual(5, parsedResult.Player1.Board[4]);
-            Assert.AreEqual(5, parsedResult.Player1.Board[5]);
-            Assert.AreEqual(0, parsedResult.Player1.Board[6]);
+            var expectedPlayer1Board = new int[] { 4, 0, 5, 5, 5, 5, 0 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer1Board, parsedResult.Player1.Board));
             Assert.IsNotNull(parsedResult.Player2);
-            Assert.AreEqual(4, parsedResult.Player2.Board[0]);
-            Assert.AreEqual(4, parsedResult.Player2.Board[1]);
-            Assert.AreEqual(4, parsedResult.Player2.Board[2]);
-            Assert.AreEqual(4, parsedResult.Player2.Board[3]);
-            Assert.AreEqual(4, parsedResult.Player2.Board[4]);
-            Assert.AreEqual(4, parsedResult.Player2.Board[5]);
-            Assert.AreEqual(0, parsedResult.Player2.Board[6]);
+            var expectedPlayer2Board = new int[] { 4, 4, 4, 4, 4, 4, 0 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer2Board, parsedResult.Player2.Board));
         }
+
+        //[TestMethod]
+        //public void LoadAndPlayAndReturnGameStateAsString_WithValidParameters_ShouldReturnExpectedResultStates()
+        //{
+        //    //arrange
+        //    Arrange();
+        //    _gameInstance.State = new GameInstanceState
+        //    {
+        //        DataAsJson = "{\"hasGameBeenSetup\":true,\"gameIsPlayable\":true,\"isPlayer1Turn\":true," +
+        //        "\"player1\":{\"board\":[0,1,0,1,1,0,28],\"user\":{\"userId\":2,\"role\":\"Player\",\"userEmail\":\"dingle@dingle.com\"}}," +
+        //        "\"player2\":{\"board\":[0,0,0,1,0,0,16],\"user\":{\"userId\":1,\"role\":\"Player\",\"userEmail\":\"test@test.com\"}}," +
+        //        "\"result\":null}",
+        //        DateCreated = Convert.ToDateTime("12-12-2012 12:12:12AM"),
+        //        GameInstanceId = Guid.Parse("d3738777-44b9-4ce8-8bf7-3ce2e985ef52"),
+        //        Id = 3983
+        //    };
+        //    _gameInstance.Users = new List<GameInstanceUser>
+        //    {
+        //        new GameInstanceUser
+        //        {
+        //            UserId = 2,
+        //            Role = GameInstanceRoles.Player.ToString()
+        //        },
+        //        new GameInstanceUser
+        //        {
+        //            UserId = 1,
+        //            Role = GameInstanceRoles.Player.ToString()
+        //        }
+        //    };
+
+        //    //act
+        //    var gameStateResponse = _mancalaGameLogic.LoadAndPlayAndReturnGameStateAsString(_gameInstance, 2, "2");
+        //    var parsedResult = JsonSerializer.Deserialize<MancalaGameState>(gameStateResponse.Data);
+
+        //    //assert
+        //    Assert.AreEqual(0, gameStateResponse.Errors.Count);
+        //    Assert.AreEqual(0, gameStateResponse.Messages.Count);
+
+        //    Assert.AreEqual(true, parsedResult.HasGameBeenSetup);
+        //    Assert.AreEqual(true, parsedResult.GameIsPlayable);
+        //    Assert.AreEqual(false, parsedResult.IsPlayer1Turn);
+        //    Assert.IsNotNull(parsedResult.Player1);
+        //    var expectedPlayer1Board = new int[] { 4, 0, 5, 5, 5, 5, 0 };
+        //    Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer1Board, parsedResult.Player1.Board));
+        //    Assert.IsNotNull(parsedResult.Player2);
+        //    var expectedPlayer2Board = new int[] { 4, 4, 4, 4, 4, 4, 0 };
+        //    Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer2Board, parsedResult.Player2.Board));
+        //}
 
         [TestMethod]
         public void LoadAndPlayAndReturnGameStateAsString_WithInvalidMove_ShouldReturnError()
@@ -254,21 +284,11 @@ namespace Core.Tests.Logic
             Assert.AreEqual(true, parsedResult.GameIsPlayable);
             Assert.AreEqual(true, parsedResult.IsPlayer1Turn);
             Assert.IsNotNull(parsedResult.Player1);
-            Assert.AreEqual(4, parsedResult.Player1.Board[0]);
-            Assert.AreEqual(0, parsedResult.Player1.Board[1]);
-            Assert.AreEqual(3, parsedResult.Player1.Board[2]);
-            Assert.AreEqual(3, parsedResult.Player1.Board[3]);
-            Assert.AreEqual(3, parsedResult.Player1.Board[4]);
-            Assert.AreEqual(3, parsedResult.Player1.Board[5]);
-            Assert.AreEqual(1, parsedResult.Player1.Board[6]);
+            var expectedPlayer1Board = new int[] { 4,0,3,3,3,3,1 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer1Board, parsedResult.Player1.Board));
             Assert.IsNotNull(parsedResult.Player2);
-            Assert.AreEqual(6, parsedResult.Player2.Board[0]);
-            Assert.AreEqual(6, parsedResult.Player2.Board[1]);
-            Assert.AreEqual(6, parsedResult.Player2.Board[2]);
-            Assert.AreEqual(6, parsedResult.Player2.Board[3]);
-            Assert.AreEqual(6, parsedResult.Player2.Board[4]);
-            Assert.AreEqual(6, parsedResult.Player2.Board[5]);
-            Assert.AreEqual(2, parsedResult.Player2.Board[6]);
+            var expectedPlayer2Board = new int[] { 6,6,6,6,6,6,2 };
+            Assert.IsTrue(Enumerable.SequenceEqual(expectedPlayer2Board, parsedResult.Player2.Board));
         }
 
         [TestMethod]

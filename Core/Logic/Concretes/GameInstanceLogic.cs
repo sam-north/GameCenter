@@ -1,10 +1,12 @@
 ﻿using Core.DataAccess;
 using Core.Framework.Mappers;
 using Core.Framework.Models;
+using Core.Framework.Serializers;
 using Core.Logic.Interfaces;
 using Core.Models;
 using Core.Models.Constants;
 using Core.Models.Dtos;
+using Core.Models.Games;
 using Core.Providers.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -45,7 +47,7 @@ namespace Core.Logic.Concretes
                                                 .Include(x => x.Game)
                                                 .Include(x => x.Users)
                                                     .ThenInclude(x => x.User)
-                                                .Where(x => !x.IsDeleted
+                                                .Where(x => !x.IsDeleted && x.Result == null
                                                             && x.Users.Select(x => x.UserId).Contains(RequestContext.UserId))
                                                 .OrderBy(x => x.DateCreated).ToList();
             return results;
@@ -217,9 +219,15 @@ namespace Core.Logic.Concretes
 
             var newGameStateAsJsonStringResponse = gameStrategy != null ? gameStrategy.LoadAndPlayAndReturnGameStateAsString(gameInstance, RequestContext.UserId, dto.UserInput) : new Response<string> { Data = "" };
             var response = ResponseMapper.MapMetadata<GameInstance>(newGameStateAsJsonStringResponse);
+            if (!response.IsValid)
+                return response;            
 
-            if (!response.IsValid || response.Messages.Any(x => x.Contains("wins!")))
+            if (!string.IsNullOrWhiteSpace(gameInstance.Result) && response.Messages.Any(x => x.Contains("wins!")))
                 return response;
+
+            var extractedResult = JsonSerializer.Deserialize<GameStateResult>(newGameStateAsJsonStringResponse.Data);
+            if (string.IsNullOrWhiteSpace(gameInstance.Result) && !string.IsNullOrWhiteSpace(extractedResult.Result))
+                gameInstance.Result = extractedResult.Result;
 
             var newGameState = CreateGameStateObject(newGameStateAsJsonStringResponse.Data);
 

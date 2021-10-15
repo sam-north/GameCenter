@@ -1,19 +1,19 @@
 
 <main>
-    <div id="opponent-keep" class="keep">
+    <div id="opponent-keep" class="keep {{this.perspectiveGameState.isCurrentPlayerTurn}}">
         {{perspectiveGameState.opposingPlayer.board[6]}}
     </div>
-    <div id="opponent-slots" class="slots">
+    <div id="opponent-slots" class="slots {{this.perspectiveGameState.isCurrentPlayerTurn}}">
         <div *ngFor="let val of columns; let i = index" class="slot">
             {{perspectiveGameState.opposingPlayer.board[columns.length - 1 - i]}}
         </div>
     </div>
-    <div id="player-slots" class="slots">
-        <div *ngFor="let val of columns; let i = index" class="slot" (click)="currentPlayerSlotClick(i)">
+    <div id="player-slots" class="slots {{this.perspectiveGameState.isCurrentPlayerTurn}}">
+        <div *ngFor="let val of columns; let i = index" class="slot {{getPlayerSlotClass(i)}}" (click)="currentPlayerSlotClick(i)">
             {{perspectiveGameState.currentPlayer.board[i]}}
         </div>
     </div>
-    <div id="player-keep" class="keep">
+    <div id="player-keep" class="keep {{this.perspectiveGameState.isCurrentPlayerTurn}}">
         {{perspectiveGameState.currentPlayer.board[6]}}
     </div>
 </main>

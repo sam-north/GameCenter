@@ -25,7 +25,13 @@ export class PlayMancalaComponent implements OnChanges {
   }
 
   currentPlayerSlotClick(i: number) {
-    this.userInputReceived.emit((i + 1).toString());
+    if (this.perspectiveGameState.isCurrentPlayerTurn && this.perspectiveGameState.currentPlayer.board[i] > 0) 
+      this.userInputReceived.emit((i + 1).toString());
+  }
+  getPlayerSlotClass(i: number): string {
+    if (this.perspectiveGameState.isCurrentPlayerTurn && this.perspectiveGameState.currentPlayer.board[i] > 0) 
+      return 'playable';
+    return;
   }
 
   translateGameStateToPerspective(currentValue: string) {

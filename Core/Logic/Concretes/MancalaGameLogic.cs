@@ -56,20 +56,28 @@ namespace Core.Logic.Concretes
 
         private void CheckGameState(int userId, string input)
         {
-            if (_gameState.GameIsPlayable) Turn(userId, input);
-            else AnnounceWinner();
+            if (_gameState.GameIsPlayable)
+            {
+                Turn(userId, input);
+                _gameState.GameIsPlayable = CheckForEndOfGame();
+                if (!_gameState.GameIsPlayable)
+                    SetResult();
+            }
+            else SetResult();
         }
 
-        private void AnnounceWinner()
+        private void SetResult()
         {
             var winner = (_gameState.Player1.Board[6] > _gameState.Player2.Board[6]) ? _gameState.Player1 : (_gameState.Player2.Board[6] > _gameState.Player1.Board[6]) ? _gameState.Player2 : null;
 
             if (winner == null)
             {
+                _gameState.Result = Strings.GameInstanceResults.Tie;
                 _response.Messages.Add("It's a tie! Nobody wins!");
                 return;
             }
 
+            _gameState.Result = winner.User.UserId.ToString();
             _response.Messages.Add(winner.User?.UserEmail + " wins!");
             _response.Messages.Add($"{_gameState.Player1.User?.UserEmail} had {_gameState.Player1.Board[6]} and {_gameState.Player2.User?.UserEmail} had {_gameState.Player2.Board[6]}");
         }
