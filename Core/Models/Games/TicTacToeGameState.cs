@@ -1,6 +1,8 @@
-﻿namespace Core.Models.Games
+﻿using Core.Models.Interfaces;
+
+namespace Core.Models.Games
 {
-    class TicTacToeGameState
+    public class TicTacToeGameState : IGameState
     {
 
         public bool HasGameBeenSetup { get; set; }
@@ -14,5 +16,9 @@
         public string Player1 { get; set; }
 
         public string Player2 { get; set; }
+
+
+        public bool GameIsPlayable { get; set; }
+        public string Result { get; set; }
     }
 }

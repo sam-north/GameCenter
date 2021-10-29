@@ -1,30 +1,19 @@
-﻿using Core.Framework.Models;
-using Core.Framework.Serializers;
-using Core.Logic.Interfaces;
+﻿using Core.Logic.Interfaces;
+using Core.Mappers.Interfaces;
 using Core.Models;
 using Core.Models.Constants;
 using Core.Models.Games;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Core.Logic.Concretes
 {
-    public class TicTacToeGameLogic : ITicTacToeGameLogic
+    public class TicTacToeGameLogic : BaseGameLogic<TicTacToeGameState>, ITicTacToeGameLogic
     {
+        public TicTacToeGameLogic(IGameInstanceMapper gameInstanceMapper)
+            : base(gameInstanceMapper) { }
 
-        private TicTacToeGameState _gameState;
-        private ICollection<GameInstanceUser> _gameInstanceUsers;
-        private IResponse<string> _response { get; set; } = new Response<string>();
-        public string GetDefaultGameState(GameInstance gameInstance)
-        {
-            _gameInstanceUsers = gameInstance.Users;
-            SetupGame();
-            return CreateGameStateAsString();
-
-        }
-
-        private void SetupGame()
+        protected override void SetupGame()
         {
             var playerUsers = _gameInstanceUsers.Where(x => x.Role == GameInstanceRoles.Player.ToString());
             _gameState = new TicTacToeGameState
@@ -38,60 +27,12 @@ namespace Core.Logic.Concretes
             _response.Messages.Add("Welcome to Tic-Tac-Toe!");
         }
 
-        private string CreatePlayer(GameInstanceUser gameInstanceUser)
+        protected override void SetResult()
         {
-            return gameInstanceUser.User.Email;
-        }
-
-
-        
-
-        public IResponse<string> LoadAndPlayAndReturnGameStateAsString(GameInstance gameInstanceWithPreviousState, int userId, string userInput)
-        {
-            _gameInstanceUsers = gameInstanceWithPreviousState.Users;
-
-            LoadGame(gameInstanceWithPreviousState);
-            Play(userId, userInput);
-            var response = new Response<string>();
- 
-            return response;
-        }
-
-        private void Play(int userId, string userInput)
-        {
-            CheckGameState(userId, userInput);
-        }
-
-        private void LoadGame(GameInstance gameInstanceWithPreviousState)
-        {
-            if (gameInstanceWithPreviousState != null)
-                _gameState = JsonSerializer.Deserialize<TicTacToeGameState>(gameInstanceWithPreviousState.State.DataAsJson);
-        }
-
-        private string CreateGameStateAsString()
-        {
-            string jsonString = JsonSerializer.Serialize(_gameState);
-            return jsonString;
-        }
-        
-        private void CheckGameState(int userId, string input)
-        {
-            if (_gameState.Winner == null) Turn(userId, input);
-            else AnnounceWinner();
-        }
-
-        private void AnnounceWinner()
-        {
-            // TODO write this
             throw new NotImplementedException();
         }
 
-        private void Turn(int userId, string input)
-        {
-            _gameState.Winner = CheckForEndOfGame();
-        }
-
-        private string CheckForEndOfGame()
+        protected override bool CheckForEndOfGame()
         {
             int[,] lines = {
                 {0, 1, 2},
@@ -115,11 +56,33 @@ namespace Core.Logic.Concretes
                    (_gameState.Board[a] == _gameState.Board[c])
                     )
                 {
-                    return _gameState.Board[a];
+                    return true; // _gameState.Board[a] ;
                 };
 
             }
-            return null;
+            return false;
+        }
+
+        protected override void CheckGameState(int userId, string input)
+        {
+            if (_gameState.Winner == null) Turn(userId, input);
+            else AnnounceWinner();
+        }
+
+        private string CreatePlayer(GameInstanceUser gameInstanceUser)
+        {
+            return gameInstanceUser.User.Email;
+        }
+
+        private void AnnounceWinner()
+        {
+            // TODO write this
+            throw new NotImplementedException();
+        }
+
+        private void Turn(int userId, string input)
+        {
+            throw new NotImplementedException();
         }
     }
 }

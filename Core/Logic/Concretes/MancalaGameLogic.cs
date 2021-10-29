@@ -10,51 +10,12 @@ using System.Linq;
 
 namespace Core.Logic.Concretes
 {
-    public class MancalaGameLogic : IMancalaGameLogic
+    public class MancalaGameLogic : BaseGameLogic<MancalaGameState>, IMancalaGameLogic
     {
-        private MancalaGameState _gameState;
-        private ICollection<GameInstanceUser> _gameInstanceUsers;
-        private IGameInstanceMapper GameInstanceMapper { get; }
-        private IResponse<string> _response { get; set; } = new Response<string>();
-
         public MancalaGameLogic(IGameInstanceMapper gameInstanceMapper)
-        {
-            GameInstanceMapper = gameInstanceMapper;
-        }
-        public string GetDefaultGameState(GameInstance gameInstance)
-        {
-            _gameInstanceUsers = gameInstance.Users;
-            SetupGame();
-            return CreateGameStateAsString();
-        }
+            : base(gameInstanceMapper) { }
 
-        public IResponse<string> LoadAndPlayAndReturnGameStateAsString(GameInstance gameInstanceWithPreviousState, int userId, string userInput)
-        {
-            _gameInstanceUsers = gameInstanceWithPreviousState.Users;
-
-            LoadGame(gameInstanceWithPreviousState);
-            Play(userId, userInput);
-            _response.Data = CreateGameStateAsString();
-            return _response;
-        }
-
-        private void Play(int userId, string userInput)
-        {
-            CheckGameState(userId, userInput);
-        }
-
-        private void LoadGame(GameInstance gameInstanceWithPreviousState)
-        {
-            if (gameInstanceWithPreviousState != null)
-                _gameState = JsonSerializer.Deserialize<MancalaGameState>(gameInstanceWithPreviousState.State.DataAsJson);
-        }
-
-        private string CreateGameStateAsString()
-        {
-            return JsonSerializer.Serialize(_gameState);
-        }
-
-        private void CheckGameState(int userId, string input)
+        protected override void CheckGameState(int userId, string input)
         {
             if (_gameState.GameIsPlayable)
             {
@@ -66,7 +27,7 @@ namespace Core.Logic.Concretes
             else SetResult();
         }
 
-        private void SetResult()
+        protected override void SetResult()
         {
             var winner = (_gameState.Player1.Board[6] > _gameState.Player2.Board[6]) ? _gameState.Player1 : (_gameState.Player2.Board[6] > _gameState.Player1.Board[6]) ? _gameState.Player2 : null;
 
@@ -82,7 +43,35 @@ namespace Core.Logic.Concretes
             _response.Messages.Add($"{_gameState.Player1.User?.UserEmail} had {_gameState.Player1.Board[6]} and {_gameState.Player2.User?.UserEmail} had {_gameState.Player2.Board[6]}");
         }
 
-        private void SetupGame()
+        protected override bool CheckForEndOfGame()
+        {
+            var player1PossibleMoves = GetPlayerPossibleSpotsToMove(_gameState.Player1);
+            if (!player1PossibleMoves.Any())
+            {
+                for (int i = 0; i < 6; i++)
+                {
+                    _gameState.Player2.Board[6] += _gameState.Player2.Board[i];
+                    _gameState.Player2.Board[i] = 0;
+                }
+                return false;
+            }
+
+            var player2PossibleMoves = GetPlayerPossibleSpotsToMove(_gameState.Player2);
+            if (!player2PossibleMoves.Any())
+            {
+
+                for (int i = 0; i < 6; i++)
+                {
+                    _gameState.Player1.Board[6] += _gameState.Player1.Board[i];
+                    _gameState.Player1.Board[i] = 0;
+                }
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override void SetupGame()
         {
             var playerUsers = _gameInstanceUsers.Where(x => x.Role == GameInstanceRoles.Player.ToString());
             _gameState = new MancalaGameState
@@ -94,14 +83,6 @@ namespace Core.Logic.Concretes
                 HasGameBeenSetup = true
             };
             _response.Messages.Add("Welcome to Mancala!");
-        }
-
-        private MancalaPlayer CreatePlayer(GameInstanceUser gameInstanceUser)
-        {
-            var player = new MancalaPlayer();
-            player.Board = new int[7] { 4, 4, 4, 4, 4, 4, 0 };
-            player.User = GameInstanceMapper.Map(gameInstanceUser);
-            return player;
         }
 
         private void Turn(int userId, string input)
@@ -131,39 +112,6 @@ namespace Core.Logic.Concretes
             }
 
             Move(indexToMove - 1, currentPlayer, opponentPlayer);
-        }
-
-        private bool UserIsInvalidUser(int userId)
-        {
-            return !_gameInstanceUsers.Select(x => x.UserId).Any(x => x == userId);
-        }
-
-        private bool CheckForEndOfGame()
-        {
-            var player1PossibleMoves = GetPlayerPossibleSpotsToMove(_gameState.Player1);
-            if (!player1PossibleMoves.Any())
-            {
-                for (int i = 0; i < 6; i++)
-                {
-                    _gameState.Player2.Board[6] += _gameState.Player2.Board[i];
-                    _gameState.Player2.Board[i] = 0;
-                }
-                return false;
-            }
-
-            var player2PossibleMoves = GetPlayerPossibleSpotsToMove(_gameState.Player2);
-            if (!player2PossibleMoves.Any())
-            {
-
-                for (int i = 0; i < 6; i++)
-                {
-                    _gameState.Player1.Board[6] += _gameState.Player1.Board[i];
-                    _gameState.Player1.Board[i] = 0;
-                }
-                return false;
-            }
-
-            return true;
         }
 
         private void Move(int indexToMove, MancalaPlayer currentPlayer, MancalaPlayer opponentPlayer)
@@ -228,6 +176,14 @@ namespace Core.Logic.Concretes
                     result.Add(i + 1);
             }
             return result;
+        }
+
+        private MancalaPlayer CreatePlayer(GameInstanceUser gameInstanceUser)
+        {
+            var player = new MancalaPlayer();
+            player.Board = new int[7] { 4, 4, 4, 4, 4, 4, 0 };
+            player.User = GameInstanceMapper.Map(gameInstanceUser);
+            return player;
         }
 
         private MancalaPlayer GetOpponentPlayer()
