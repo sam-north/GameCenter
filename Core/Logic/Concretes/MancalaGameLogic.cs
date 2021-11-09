@@ -1,6 +1,4 @@
-﻿using Core.Framework.Models;
-using Core.Framework.Serializers;
-using Core.Logic.Interfaces;
+﻿using Core.Logic.Interfaces;
 using Core.Mappers.Interfaces;
 using Core.Models;
 using Core.Models.Constants;
@@ -20,7 +18,7 @@ namespace Core.Logic.Concretes
             if (_gameState.GameIsPlayable)
             {
                 Turn(userId, input);
-                _gameState.GameIsPlayable = CheckForEndOfGame();
+                _gameState.GameIsPlayable = IsGamePlayable();
                 if (!_gameState.GameIsPlayable)
                     SetResult();
             }
@@ -43,7 +41,7 @@ namespace Core.Logic.Concretes
             _response.Messages.Add($"{_gameState.Player1.User?.UserEmail} had {_gameState.Player1.Board[6]} and {_gameState.Player2.User?.UserEmail} had {_gameState.Player2.Board[6]}");
         }
 
-        protected override bool CheckForEndOfGame()
+        protected override bool IsGamePlayable()
         {
             var player1PossibleMoves = GetPlayerPossibleSpotsToMove(_gameState.Player1);
             if (!player1PossibleMoves.Any())
@@ -87,7 +85,7 @@ namespace Core.Logic.Concretes
 
         private void Turn(int userId, string input)
         {
-            _gameState.GameIsPlayable = CheckForEndOfGame();
+            _gameState.GameIsPlayable = IsGamePlayable();
             if (!_gameState.GameIsPlayable) return;
 
             if (userId == 0 || UserIsInvalidUser(userId))

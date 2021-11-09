@@ -58,7 +58,7 @@ namespace Core.Logic.Concretes
             return !_gameInstanceUsers.Select(x => x.UserId).Any(x => x == userId);
         }
 
-        protected abstract bool CheckForEndOfGame();
+        protected abstract bool IsGamePlayable();
         protected abstract void CheckGameState(int userId, string userInput);
         protected abstract void SetupGame();
         protected abstract void SetResult();

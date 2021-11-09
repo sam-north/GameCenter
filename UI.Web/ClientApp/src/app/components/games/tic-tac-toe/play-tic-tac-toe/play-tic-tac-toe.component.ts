@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { TicTacToeGameState } from 'src/app/models/TicTacToeGameState';
+import { TicTacToePerspectiveGameState } from 'src/app/models/TicTacToePerspectiveGameState';
+import { GodService } from 'src/app/services/god.service';
+import { isNullOrWhiteSpace } from 'src/app/utilities/StringFunctions';
 
 @Component({
     selector: 'app-play-tic-tac-toe',
@@ -9,62 +13,48 @@ import { Component, OnInit } from '@angular/core';
     ]
 })
 
-export class PlayTicTacToeComponent implements OnInit {
-    squares: any[];
-    xIsNext: boolean;
-    winner: string;
+export class PlayTicTacToeComponent implements OnChanges {
+    whosTurnMessage: string;
+    @Input() gameState: string;
+    @Output() userInputReceived: EventEmitter<any> = new EventEmitter<any>();
+    perspectiveGameState: TicTacToePerspectiveGameState = new TicTacToePerspectiveGameState();
 
-    constructor() {}
-
-    ngOnInit() {
-        this.newGame();
+    constructor(private god: GodService) {
     }
 
-    newGame() {
-        this.squares = Array(9).fill(null);
-        this.winner = null;
-        this.xIsNext = true;
+    ngOnChanges(changes: SimpleChanges): void {
+      if (changes.gameState) {
+        this.translateGameStateToPerspective(changes.gameState.currentValue);
+      }
+    }
+  
+    currentPlayerSlotClick(i: number) {
+      if (this.perspectiveGameState.isCurrentPlayerTurn && isNullOrWhiteSpace(this.perspectiveGameState.board[i])) 
+        this.userInputReceived.emit((i).toString());
     }
 
-    get player() {
-        return this.xIsNext ? 'X' : 'O';
-    }
-
-    // method serves as event handler when click a button
-    // check index in the array they've clicked on
-    // if already clicked do nothing
-    // if null, splice in the index of the square with the player (x or o)
-    makeMove(index: number) {
-        if (!this.squares[index]) {
-            this.squares.splice(index, 1, this.player)
-            this.xIsNext = !this.xIsNext;
+    
+    translateGameStateToPerspective(currentValue: string) {
+        let gameState: TicTacToeGameState = JSON.parse(currentValue);
+        let client = this.god.client.getClient();
+        this.perspectiveGameState.board = gameState.board;
+        
+        this.perspectiveGameState.hasGameBeenSetup = gameState.hasGameBeenSetup;
+        this.perspectiveGameState.gameIsPlayable = gameState.gameIsPlayable;
+    
+        if (gameState.player1.user.userId === client.id) {
+          this.perspectiveGameState.isCurrentPlayerTurn = gameState.isPlayer1Turn;
+          this.perspectiveGameState.currentPlayer = JSON.parse(JSON.stringify(gameState.player1));
+          this.perspectiveGameState.opposingPlayer = JSON.parse(JSON.stringify(gameState.player2));
+        } else {
+          this.perspectiveGameState.isCurrentPlayerTurn = !gameState.isPlayer1Turn;
+          this.perspectiveGameState.currentPlayer = JSON.parse(JSON.stringify(gameState.player2));
+          this.perspectiveGameState.opposingPlayer = JSON.parse(JSON.stringify(gameState.player1));
         }
-
-        this.winner = this.calculateWinner();
-    }
-
-    calculateWinner() {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6]
-        ];
-        for (let i = 0; i < lines.length; i++) {
-            const [a, b, c] = lines[i];
-            if (
-                this.squares[a] &&
-                this.squares[a] === this.squares[b] &&
-                this.squares[a] === this.squares[c]
-            ) {
-                return this.squares[a]
-            }
-        }
-        return null;
-    }
+        this.whosTurnMessage = this.perspectiveGameState.isCurrentPlayerTurn ? `It's your turn!` : `It's ${this.perspectiveGameState.opposingPlayer.user.userEmail}'s turn!`;
+    
+        if (!this.perspectiveGameState.gameIsPlayable) 
+          this.whosTurnMessage = `The game has ended!`;
+      }
 
 }
